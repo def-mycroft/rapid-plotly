@@ -1,3 +1,7 @@
+"""speculative.
+I created this script for pricing analysis, not sure if I want to turn this into a 
+standard plot type or not.
+"""
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np

@@ -1,4 +1,7 @@
-"""Create a scatterplot using plotly
+"""Create a fancy scatterpot using plotly
+
+TODO - want to be able to show inline in jupyter, create switch
+
 """
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
