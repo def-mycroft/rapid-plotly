@@ -6,8 +6,14 @@ from scipy.stats import pearsonr
 import pandas as pd
 
 
-def chart(x, y,
-          xlab='xlab', ylab='ylab', return_model=False, descriptive=True):
+def chart(
+        x,
+        y,
+        xlab='xlab',
+        ylab='ylab',
+        title='title',
+        return_model=False,
+        descriptive=True):
     """Create simple scatterplot with slope and r2 data
     """
     fig, ax = plt.subplots(figsize=(10, 10))
@@ -21,6 +27,7 @@ def chart(x, y,
     ax.plot(x, model(x), color='red')
 
     # labels and title
+    plt.title(title)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
 
