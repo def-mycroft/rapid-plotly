@@ -11,16 +11,18 @@ from scipy.stats import pearsonr as correl
 
 def chart(x, y, names, filename,
           xlab='xlab', ylab='ylab', title='title',
-          annotation_location=(0, 0), display_para=False):
+          annotation_location=(0, 0), return_model=False):
     """Given x, y creates a plot"""
 
     # create fancy scatterplot
     slope, intercept = np.polyfit(x, y, 1)
     xi = x
     line = slope * xi + intercept
-    if display_para:
-        print('slope:', slope)
-        print('intercept:', intercept)
+
+    # define model 
+    def model(x):
+        """Simple model function"""
+        return slope*x + intercept
 
     # calculate r2 value
     r2 = correl(x, y)[0]**2
@@ -78,3 +80,7 @@ def chart(x, y, names, filename,
 
     # output
     plot(fig, filename=filename)
+
+    # return model function
+    if return_model:
+        return model
