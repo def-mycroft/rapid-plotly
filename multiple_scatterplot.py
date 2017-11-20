@@ -1,6 +1,6 @@
-"""speculative.
-I created this script for pricing analysis, not sure if I want to turn this into a 
-standard plot type or not.
+"""Creates a multiple scatterplot
+    17X20M JD - seems to be genearlly applicable. 
+    Need review this and incorporate into chartslib project 
 """
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
@@ -9,18 +9,12 @@ from scipy.stats import pearsonr as correl
 
 
 def create_chart(
-        x, y1, y2, names,
-        out_path=False, filename='test.html', anxloc=0, anyloc=0,
+        x, y1, y2, names, out_path,
+        filename='test.html', anxloc=0, anyloc=0,
         xy1_label=('x label', 'y1 label'), title='graph title',
         y2_label='y2 label', yax_title='y axis title', 
         y1msgloc=(0,0), y2msgloc=(0,0)):
     """Given x, y1, y2 creates a plot"""
-    # filename for output file
-    filename += '.html'
-    if not out_path:
-        filename = out_path + filename
-    else:
-        filename = out_path + filename
 
     # setup labels
     x_label = xy1_label[0]
