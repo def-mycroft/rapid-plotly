@@ -8,17 +8,16 @@ import numpy as np
 from scipy.stats import pearsonr as correl
 
 
-def create_chart(
-        x, y1, y2, names, out_path,
-        filename='test.html', anxloc=0, anyloc=0,
-        xy1_label=('x label', 'y1 label'), title='graph title',
-        y2_label='y2 label', yax_title='y axis title', 
-        y1msgloc=(0,0), y2msgloc=(0,0)):
+def chart(
+        x, y1, y2, names, filename,
+        title='graph title',
+        xlab='x label', 
+        ylab='y label',
+        y1_lab='y1 label',
+        y2_lab='y2 label',  
+        y1_msgloc=(0,0), 
+        y2_msgloc=(0,0)):
     """Given x, y1, y2 creates a plot"""
-
-    # setup labels
-    x_label = xy1_label[0]
-    y1_label = xy1_label[1]
 
     # plot first set of scatter points
     trace1 = go.Scatter(
@@ -26,7 +25,7 @@ def create_chart(
         y=y1,
         mode='markers',
         marker=go.Marker(color='#3D3C28'),
-        name=y1_label,
+        name='Y1: ' + y1_lab,
         text=names
     )
 
@@ -36,7 +35,7 @@ def create_chart(
         y=y2,
         mode='markers',
         marker=go.Marker(color='green'),
-        name=y2_label,
+        name='Y2: ' + y2_lab,
         text=names
     )
 
@@ -81,28 +80,28 @@ def create_chart(
         xaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
-            title=x_label
+            title=xlab
         ),
 
         yaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
-            title=yax_title
+            title=ylab
         ),
 
         annotations=[
 
             dict(
-                text='y1 R^2: %s' % round(r2y1, 2),
-                x=y1msgloc[0],
-                y=y1msgloc[1],
+                text='Y1 r^2: %s' % round(r2y1, 2),
+                x=y1_msgloc[0],
+                y=y1_msgloc[1],
                 showarrow=False
             ),
 
             dict(
-                text='y2 R^2: %s' % round(r2y2, 2),
-                x=y2msgloc[0],
-                y=y2msgloc[1],
+                text='Y2 r^2: %s' % round(r2y2, 2),
+                x=y2_msgloc[0],
+                y=y2_msgloc[1],
                 showarrow=False
             )
 
