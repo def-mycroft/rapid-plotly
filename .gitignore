@@ -1,0 +1,7 @@
+
+# don't keep pycache files
+**/__pycache__/
+
+# don't keep pyc files 
+*.pyc
+
