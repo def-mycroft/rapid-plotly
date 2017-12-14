@@ -97,25 +97,15 @@ def chart(
         xaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
-<<<<<<< HEAD
-            dtick=xdtick,
-            title=xlab
-=======
             title=xlab,
        	    dtick=xdtick
->>>>>>> 967db1bebb0e177a51a43ecb9dc54530dab76830
         ),
 
         yaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
-<<<<<<< HEAD
-            dtick=ydtick,
-            title=ylab
-=======
             title=ylab,
        	    dtick=ydtick
->>>>>>> 967db1bebb0e177a51a43ecb9dc54530dab76830
         ),
 
         annotations=[
