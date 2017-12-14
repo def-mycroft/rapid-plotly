@@ -1,6 +1,7 @@
 """Creates a multiple scatterplot
-    17X20M JD - seems to be genearlly applicable. 
+
     Need review this and incorporate into chartslib project 
+
 """
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
@@ -15,6 +16,8 @@ def chart(
         ylab='y label',
         y1_lab='y1 label',
         y2_lab='y2 label',  
+        xtick_height=False,
+        ytick_height=False,
         y1_msgloc=(0,0), 
         y2_msgloc=(0,0)):
     """Given x, y1, y2 creates a plot"""
@@ -71,6 +74,20 @@ def chart(
         name='Y2 Fit'
     )
 
+    # setup y ticks 
+    ydtick = ''
+    if ytick_height == False:
+        ydtick = max(y1) / 20
+    else:
+        ydtick = ytick_height
+
+    # setup x ticks 
+    xdtick = ''
+    if xtick_height == False:
+        xdtick = max(x) / 20
+    else:
+        xdtick = xtick_height
+
     # create layout
     layout = go.Layout(
 
@@ -80,13 +97,25 @@ def chart(
         xaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
+<<<<<<< HEAD
+            dtick=xdtick,
             title=xlab
+=======
+            title=xlab,
+       	    dtick=xdtick
+>>>>>>> 967db1bebb0e177a51a43ecb9dc54530dab76830
         ),
 
         yaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
+<<<<<<< HEAD
+            dtick=ydtick,
             title=ylab
+=======
+            title=ylab,
+       	    dtick=ydtick
+>>>>>>> 967db1bebb0e177a51a43ecb9dc54530dab76830
         ),
 
         annotations=[
