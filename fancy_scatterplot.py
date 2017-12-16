@@ -11,7 +11,8 @@ from scipy.stats import pearsonr as correl
 
 def chart(x, y, names, filename,
           xlab='xlab', ylab='ylab', title='title',
-          annotation_location=(0, 0), return_model=False):
+          annotation_location=(0, 0), return_model=False, xtick_height=False,
+          ytick_height=False):
     """Given x, y creates a plot"""
 
     # create fancy scatterplot
@@ -46,6 +47,20 @@ def chart(x, y, names, filename,
         name='Fit'
     )
 
+    # setup y ticks 
+    ydtick = ''
+    if ytick_height == False:
+        ydtick = max(y) / 20
+    else:
+        ydtick = ytick_height
+
+    # setup x ticks 
+    xdtick = ''
+    if xtick_height == False:
+        xdtick = max(x) / 20
+    else:
+        xdtick = xtick_height
+
     # create layout
     layout = go.Layout(
 
@@ -55,13 +70,15 @@ def chart(x, y, names, filename,
         xaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
-            title=xlab
+            title=xlab,
+            dtick=xdtick
         ),
 
         yaxis=dict(
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
-            title=ylab
+            title=ylab,
+            dtick=ydtick
         ),
 
         annotations=[
