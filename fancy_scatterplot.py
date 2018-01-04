@@ -21,8 +21,11 @@ def chart(x, y, names, filename,
     line = slope * xi + intercept
 
     # define model 
-    def model(x):
+    def model(x, view_coefficients=False):
         """Simple model function"""
+        if view_coefficients:
+            print('slope: %s' % slope)
+            print('intercept: %s' % intercept)
         return slope*x + intercept
 
     # calculate r2 value
