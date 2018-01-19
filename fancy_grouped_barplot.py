@@ -4,13 +4,14 @@ import numpy as np
 import pandas as pd
 
 
-def chart(in_data, filename,
+def chart(in_data, filename, names1, names2,
         title='title', xlab='xlab', ylab='ylab'):
 
     trace1 = go.Bar(
             x=list(in_data.index),
             y=in_data[in_data.columns[0]],
             name=in_data.columns[0],
+            text=names1,
             marker=go.Marker(color='#3D3C28')
     )
 
@@ -18,6 +19,7 @@ def chart(in_data, filename,
             x=list(in_data.index),
             y=in_data[in_data.columns[1]],
             name=in_data.columns[1],
+            text=names2,
             marker=go.Marker(color='#9B2D1E')
     )
 
