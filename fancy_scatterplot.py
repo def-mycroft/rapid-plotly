@@ -23,6 +23,8 @@ def chart(x, y, names, filename,
     # define model 
     def model(x, view_coefficients=False):
         """Simple model function"""
+        # TODO have hacky way of viewing coefficients...
+        # ...try to make this a property or something
         if view_coefficients:
             print('slope: %s' % slope)
             print('intercept: %s' % intercept)
