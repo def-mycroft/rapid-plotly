@@ -1,6 +1,4 @@
-"""Creates a multiple scatterplot
-    17X20M JD - seems to be genearlly applicable. 
-    Need review this and incorporate into chartslib project 
+"""Creates a multiple boxplot 
 """
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
@@ -8,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 
-def chart(in_data, filename, 
+def chart(in_data, names, filename, 
         name='name', title='title', ylab='ylab', boxpoints=None):
     """Creates fancy boxplots with plotly.
 
@@ -18,39 +16,41 @@ def chart(in_data, filename,
 
     """
     # create box objects 
-    data = [go.Box(
+    def create_plot(data_series, name):
+        """Creates a boxplot"""
+        box = go.Box(
+            y=data_series,
+            name=name,
+            boxpoints=boxpoints,
+            boxmean=True,
+            marker=dict(
+                color='#3D3C28'
+                )
+        )
 
-        y=in_data,
-        name=name,
-        boxpoints=boxpoints,
-        boxmean=True,
+        return box
 
-        marker=dict(
-            color='#3D3C28'
-            ),
-    )]
-
+    data = list()
+    for name in names:
+        series = in_data[name]
+        total = '${:,.3f}'.format(series.sum() / 1000000)
+        name = '%s<br>(n=%s, sum=%sM)' % (
+                name, len(series), total
+                )
+        data.append(create_plot(series, name))
 
     # create layout
     layout = go.Layout(
 
             title=title,
             plot_bgcolor='rgb(229, 229, 229)',
+            showlegend=False,
 
             yaxis=dict(
                 zerolinecolor='rgb(255,255,255)',
                 gridcolor='rgb(255,255,255)',
                 title=ylab
-            ),
-
-            annotations=[
-                dict(
-                    text='quantity in sample: %s' % len(in_data),
-                    x=0,
-                    y=int(0.75 * in_data.max()),
-                    showarrow=False
-                )],
-
+            )
             )
 
     # create figure
