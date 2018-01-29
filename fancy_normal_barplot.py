@@ -19,7 +19,7 @@ def chart(in_data, filename,
         y=in_data['y'],
         text=in_data['text'],
         marker=dict(
-            color='#9B2D1E'
+            color='#0E5688'
         )
     )
 
