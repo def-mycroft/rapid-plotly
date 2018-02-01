@@ -22,19 +22,19 @@ def chart(in_data, offset, filename,
     member of the bargroup.
 
         x           stack                  y
-        0-10K       content             19.0
+        0-10K       content_development 19.0
         0-10K       creative_services   26.5
         0-10K       project_management  14.0
-        10K-25K     content             19.0
+        10K-25K     content_development 19.0
         10K-25K     creative_services   25.5
         10K-25K     project_management  16.0
-        25K-75K     content             16.0
+        25K-75K     content_development 16.0
         25K-75K     creative_services   34.5
         25K-75K     project_management   0.0
-        75K-150K    content              0.0
+        75K-150K    content_development  0.0
         75K-150K    creative_services   37.5
         75K-150K    project_management   0.0
-        150K+       content              0.0
+        150K+       content_development  0.0
         150K+       creative_services   42.0
         150K+       project_management   0.0
 
@@ -44,7 +44,7 @@ def chart(in_data, offset, filename,
     data = list()
     x_groups = in_data[0]['x'].unique().tolist()
     colors = {
-            'content':'#9B2D1E',
+            'content_development':'#9B2D1E',
             'project_management':'#3D3C28',
             'creative_services':'#0E5688'
             }
@@ -56,13 +56,13 @@ def chart(in_data, offset, filename,
 
     def append_trace(sl, department, name, base, position):
         """Appends a trace to data"""
-        msg = '%s department expected hours' % department
+        msg = '%s department expected' % department
         y_vals = sl[sl['stack'] == department]['y'].tolist()
         data.append(go.Bar(
                 x=x_groups,
                 y=y_vals,
                 name=name,
-                text=[str(x)+'<br>'+msg for x in y_vals],
+                text=[str(x)+'<br>'+msg+'<br>'+name for x in y_vals],
                 offset=position,
                 width=offset,
                 base=base,
@@ -75,7 +75,7 @@ def chart(in_data, offset, filename,
     # create plots for standard package
     sl = in_data[0]
 
-    dept = 'content'
+    dept = 'content_development'
     append_trace(
             # data slice 
             sl,                 
@@ -98,7 +98,7 @@ def chart(in_data, offset, filename,
             # hover text
             'Standard Package',       
             # base arg
-            get_base(['content'], sl),
+            get_base(['content_development'], sl),
             # bar position
             -offset                  
             )
@@ -112,7 +112,7 @@ def chart(in_data, offset, filename,
             # hover text
             'Standard Package',       
             # base arg
-            get_base(['content', 'creative_services'], sl),
+            get_base(['content_development', 'creative_services'], sl),
             # bar position
             -offset                  
             )
@@ -120,7 +120,7 @@ def chart(in_data, offset, filename,
     # create plots for premium package
     sl = in_data[1]
 
-    dept = 'content'
+    dept = 'content_development'
     append_trace(
             # data slice 
             sl,                 
@@ -143,7 +143,7 @@ def chart(in_data, offset, filename,
             # hover text
             'Premium Package',       
             # base arg
-            get_base(['content'], sl),
+            get_base(['content_development'], sl),
             # bar position
             0
             )
@@ -157,7 +157,7 @@ def chart(in_data, offset, filename,
             # hover text
             'Premium Package',       
             # base arg
-            get_base(['content', 'creative_services'], sl),
+            get_base(['content_development', 'creative_services'], sl),
             # bar position
             0
             )
@@ -165,7 +165,7 @@ def chart(in_data, offset, filename,
     # create plots for ultimate package
     sl = in_data[2]
 
-    dept = 'content'
+    dept = 'content_development'
     append_trace(
             # data slice 
             sl,                 
@@ -188,7 +188,7 @@ def chart(in_data, offset, filename,
             # hover text
             'Ultimate Package',       
             # base arg
-            get_base(['content'], sl),
+            get_base(['content_development'], sl),
             # bar position
             offset
             )
@@ -202,10 +202,11 @@ def chart(in_data, offset, filename,
             # hover text
             'Ultimate Package',       
             # base arg
-            get_base(['content', 'creative_services'], sl),
+            get_base(['content_development', 'creative_services'], sl),
             # bar position
             offset                  
             )
+
 
 
     # create layout
@@ -222,7 +223,6 @@ def chart(in_data, offset, filename,
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
             title=xlab
-
         ),
 
         yaxis=dict(
