@@ -1,5 +1,8 @@
 """Create a fancy scatterpot using plotly
 
+Passing 'text' to hoverinfo arg forces the scatter point popups to
+only show the 'names', else shows name and text.
+
 TODO - want to be able to show inline in jupyter, create switch
 
 """
@@ -12,7 +15,7 @@ from scipy.stats import pearsonr as correl
 def chart(x, y, names, filename,
           xlab='xlab', ylab='ylab', title='title',
           annotation_location=(0, 0), return_model=False, xtick_height=False,
-          ytick_height=False):
+          ytick_height=False, hoverinfo=None):
     """Given x, y creates a plot"""
 
     # create fancy scatterplot
@@ -40,7 +43,8 @@ def chart(x, y, names, filename,
         mode='markers',
         marker=go.Marker(color='#3D3C28'),
         name=ylab,
-        text=names
+        hoverinfo=hoverinfo,
+        text=names,
     )
 
     # plot trendline
