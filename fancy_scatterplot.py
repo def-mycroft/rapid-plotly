@@ -5,6 +5,9 @@ only show the 'names', else shows name and text.
 
 TODO - want to be able to show inline in jupyter, create switch
 
+TODO - see cvpl99020 project. have updated version of this which
+allows for modification of layout by passing dict as arg. 
+
 """
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
