@@ -38,15 +38,36 @@ def chart(in_data, filename,
             ['#0E5688'] * len(in_data['x'])
         ))
 
-    def create_trace(x_vals, y_vals, text, color):
+    if 'error' not in in_data.columns:
+        in_data['error'] = None
+
+    def create_trace(x_vals, y_vals, text, color, error=None):
         """Creates traces"""
+
+        error_y = dict()
+
+        if error == None:
+            error_y = {
+                'type':'data',
+                'array':[0],
+                'visible':False
+            }
+
+        else:
+            error_y = {
+                'type':'data',
+                'array':[error],
+                'visible':True
+            }
+
         trace = go.Bar(
             x=x_vals,
             y=y_vals,
             text=text,
             marker=dict(
                 color=color
-            )
+            ),
+            error_y=error_y
         )
         return trace
 
@@ -56,7 +77,8 @@ def chart(in_data, filename,
             in_data[in_data['x'] == category]['x'],
             in_data[in_data['x'] == category]['y'],
             in_data[in_data['x'] == category]['text'],
-            colors[category]
+            colors[category],
+            in_data[in_data['x'] == category]['error'].values[0]
         ))
 
     # create layout
