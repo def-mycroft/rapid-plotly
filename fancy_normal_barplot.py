@@ -6,30 +6,65 @@ import pandas as pd
 
 
 def chart(in_data, filename,
-        title='title', xlab='xlab', ylab='ylab'):
+          title='title', xlab='xlab', ylab='ylab',
+          colors=None):
     """Creates a normal barplot
 
     in_data is a dataframe containing columns 'x', 'y' and 'text' 
     where 'text' is the popup text on the bar hover text
 
+    Optionally pass a dict mapping x values to colors.
+
+    Example input:
+
+        x                        y                    text
+        Michael A Spencer       0.1742          Michael A Spencer
+        Jordan T Cairns        -0.4665          Jordan T Cairns
+        James Reilly            0.1361          James Reilly
+        Rebecca J White         0.0389          Rebecca J White
+        Alan N Montgomery       0.1749          Alan N Montgomery
+        Daniel B Elmore         0.2429          Daniel B Elmore
+        Solomon L Grover       -0.0191          Solomon L Grover
+        Dan C Schultz Jr        0.5093          Dan C Schultz Jr
+        Ahron M Jones          -0.0284          Ahron M Jones
+        William H. Spicer III   0.1524          William H. Spicer III
+
+
     """
 
-    trace1 = go.Bar(
-        x=in_data['x'],
-        y=in_data['y'],
-        text=in_data['text'],
-        marker=dict(
-            color='#0E5688'
-        )
-    )
+    if colors == None:
+        colors = dict(zip(
+            in_data['x'].unique(),
+            ['#0E5688'] * len(in_data['x'])
+        ))
 
-    data = [trace1]
+    def create_trace(x_vals, y_vals, text, color):
+        """Creates traces"""
+        trace = go.Bar(
+            x=x_vals,
+            y=y_vals,
+            text=text,
+            marker=dict(
+                color=color
+            )
+        )
+        return trace
+
+    data = list()
+    for category in in_data['x'].unique():
+        data.append(create_trace(
+            in_data[in_data['x'] == category]['x'],
+            in_data[in_data['x'] == category]['y'],
+            in_data[in_data['x'] == category]['text'],
+            colors[category]
+        ))
 
     # create layout
     layout = go.Layout(
 
         title=title,
         plot_bgcolor='rgb(229, 229, 229)',
+        showlegend=False,
 
         xaxis=dict(
             zerolinecolor='rgb(255,255,255)',
@@ -43,7 +78,6 @@ def chart(in_data, filename,
             title=ylab
         )
     )
-
 
     # create figure
     fig = go.Figure(data=data, layout=layout)
