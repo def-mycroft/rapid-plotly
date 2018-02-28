@@ -5,6 +5,37 @@ import numpy as np
 import pandas as pd
 
 
+def create_trace(x_vals, y_vals, text, color, error=None):
+    """Creates trace for barplot"""
+
+    error_y = dict()
+
+    if error == None:
+        error_y = {
+            'type':'data',
+            'array':[0],
+            'visible':False
+        }
+
+    else:
+        error_y = {
+            'type':'data',
+            'array':[error],
+            'visible':True
+        }
+
+    trace = go.Bar(
+        x=x_vals,
+        y=y_vals,
+        text=text,
+        marker=dict(
+            color=color
+        ),
+        error_y=error_y
+    )
+    return trace
+
+
 def chart(in_data, filename,
           title='title', xlab='xlab', ylab='ylab',
           colors=None):
@@ -40,36 +71,6 @@ def chart(in_data, filename,
 
     if 'error' not in in_data.columns:
         in_data['error'] = None
-
-    def create_trace(x_vals, y_vals, text, color, error=None):
-        """Creates traces"""
-
-        error_y = dict()
-
-        if error == None:
-            error_y = {
-                'type':'data',
-                'array':[0],
-                'visible':False
-            }
-
-        else:
-            error_y = {
-                'type':'data',
-                'array':[error],
-                'visible':True
-            }
-
-        trace = go.Bar(
-            x=x_vals,
-            y=y_vals,
-            text=text,
-            marker=dict(
-                color=color
-            ),
-            error_y=error_y
-        )
-        return trace
 
     data = list()
     for category in in_data['x'].unique():
