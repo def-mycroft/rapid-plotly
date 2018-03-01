@@ -1,4 +1,4 @@
-"""normal baryplot"""
+"""normal barplot"""
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np
@@ -12,16 +12,16 @@ def create_trace(x_vals, y_vals, text, color, error=None):
 
     if error == None:
         error_y = {
-            'type':'data',
-            'array':[0],
-            'visible':False
+            'type': 'data',
+            'array': [0],
+            'visible': False
         }
 
     else:
         error_y = {
-            'type':'data',
-            'array':[error],
-            'visible':True
+            'type': 'data',
+            'array': [error],
+            'visible': True
         }
 
     trace = go.Bar(
@@ -38,13 +38,16 @@ def create_trace(x_vals, y_vals, text, color, error=None):
 
 def chart(in_data, filename,
           title='title', xlab='xlab', ylab='ylab',
-          colors=None):
+          colors=None, annotation={'text': '', 'xloc': 0, 'yloc': 1}):
     """Creates a normal barplot
 
     in_data is a dataframe containing columns 'x', 'y' and 'text' 
     where 'text' is the popup text on the bar hover text
 
     Optionally pass a dict mapping x values to colors.
+
+    Optionally add an 'error' column to in_data which will set the 
+    error bars for the plot.
 
     Example input:
 
@@ -99,7 +102,17 @@ def chart(in_data, filename,
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
             title=ylab
-        )
+        ),
+
+        annotations=[
+            dict(
+                text=annotation['text'],
+                x=annotation['xloc'],
+                y=annotation['yloc'],
+                showarrow=False
+            )
+        ]
+
     )
 
     # create figure
