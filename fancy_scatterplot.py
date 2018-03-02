@@ -3,6 +3,10 @@
 Passing 'text' to hoverinfo arg forces the scatter point popups to
 only show the 'names', else shows name and text.
 
+to pass a custom trace, can import graph_objs:
+
+    import plotly.graph_objs as go
+
 TODO - want to be able to show inline in jupyter, create switch
 
 TODO - see cvpl99020 project. have updated version of this which
@@ -20,13 +24,15 @@ from scipy.stats import pearsonr as correl
 def chart(x, y, names, filename,
           xlab='xlab', ylab='ylab', title='title',
           annotation_location=(0, 0), return_model=False, xtick_height=False,
-          ytick_height=False, hoverinfo=None, suppress_model=False):
+          ytick_height=False, hoverinfo=None, suppress_model=False,
+          custom_trace=None):
     """Given x, y creates a plot"""
 
+
+    print('type of custom trace:', type(custom_trace))
     # create fancy scatterplot
     slope, intercept = np.polyfit(x, y, 1)
-    xi = x
-    line = slope * xi + intercept
+    line = slope * x + intercept
 
     # define model
     def model(x, view_coefficients=False):
@@ -54,12 +60,13 @@ def chart(x, y, names, filename,
 
     # plot trendline
     trace2 = go.Scatter(
-        x=xi,
+        x=x,
         y=line,
         mode='lines',
         marker=go.Marker(color='#9B2D1E'),
         name='Fit'
     )
+    print('type of trendline', type(trace2))
 
     # setup y ticks
     ydtick = ''
@@ -85,12 +92,18 @@ def chart(x, y, names, filename,
         }
     ]
 
+    # TODO here could be where custom annotations are added 
+
     # create data list
     data = [trace1, trace2]
 
     if suppress_model:
         annotations = []
         del data[-1]
+
+    # add custom traces passed into function 
+    if custom_trace != None:
+        data.append(custom_trace)
 
     # create layout
     layout = go.Layout(
@@ -123,4 +136,4 @@ def chart(x, y, names, filename,
 
     # return model function
     if return_model:
-        return model
+        return model, line
