@@ -6,3 +6,6 @@
 # don't keep pyc files 
 *.pyc
 
+# ignore editor files 
+.*.swp
+

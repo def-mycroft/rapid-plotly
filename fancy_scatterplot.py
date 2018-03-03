@@ -25,12 +25,10 @@ def chart(x, y, names, filename,
           xlab='xlab', ylab='ylab', title='title',
           annotation_location=(0, 0), return_model=False, xtick_height=False,
           ytick_height=False, hoverinfo=None, suppress_model=False,
-          custom_trace=None):
+          custom_trace=None, custom_layout=None):
     """Given x, y creates a plot"""
 
-
-    print('type of custom trace:', type(custom_trace))
-    # create fancy scatterplot
+    # create regression model
     slope, intercept = np.polyfit(x, y, 1)
     line = slope * x + intercept
 
@@ -105,28 +103,31 @@ def chart(x, y, names, filename,
     if custom_trace != None:
         data.append(custom_trace)
 
-    # create layout
-    layout = go.Layout(
+    # if no layout is passed, use below layout, else use passed layout
+    if custom_layout == None:
+        layout = go.Layout(
 
-        title=title,
-        plot_bgcolor='rgb(229, 229, 229)',
+            title=title,
+            plot_bgcolor='rgb(229, 229, 229)',
 
-        xaxis=dict(
-            zerolinecolor='rgb(255,255,255)',
-            gridcolor='rgb(255,255,255)',
-            title=xlab,
-            dtick=xdtick
-        ),
+            xaxis=dict(
+                zerolinecolor='rgb(255,255,255)',
+                gridcolor='rgb(255,255,255)',
+                title=xlab,
+                dtick=xdtick
+            ),
 
-        yaxis=dict(
-            zerolinecolor='rgb(255,255,255)',
-            gridcolor='rgb(255,255,255)',
-            title=ylab,
-            dtick=ydtick
-        ),
+            yaxis=dict(
+                zerolinecolor='rgb(255,255,255)',
+                gridcolor='rgb(255,255,255)',
+                title=ylab,
+                dtick=ydtick
+            ),
 
-        annotations=annotations
-    )
+            annotations=annotations
+        )
+    else:
+        layout = custom_layout
 
     # create figure 
     fig = go.Figure(data=data, layout=layout)
