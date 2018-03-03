@@ -7,43 +7,46 @@ import pandas as pd
 
 def chart(data, filename,
         xlab='xlab', ylab='ylab', title='title',
-        annotation={'text':'', 'xloc':0, 'yloc':1}):
+        annotation={'text':'', 'xloc':0, 'yloc':1},
+        layout=None):
     """Highly configurable plotly plot generator
 
-    Should be able to pass plotly data objects as "data" 
-    and output chart as normal.
+    Should be able to pass plotly data objects as "data" and output
+    chart as normal.
 
     """
 
-    # create layout
-    layout = go.Layout(
+    # if no layout passed, use standard layout, 
+    # else layout must be passed as arg
+    if layout == None:
+        layout = go.Layout(
 
-        title=title,
+            title=title,
 
-        plot_bgcolor='rgb(229, 229, 229)',
+            plot_bgcolor='rgb(229, 229, 229)',
 
-        xaxis=dict(
-            zerolinecolor='rgb(255,255,255)',
-            gridcolor='rgb(255,255,255)',
-            title=xlab
-        ),
+            xaxis=dict(
+                zerolinecolor='rgb(255,255,255)',
+                gridcolor='rgb(255,255,255)',
+                title=xlab
+            ),
 
-        yaxis=dict(
-            zerolinecolor='rgb(255,255,255)',
-            gridcolor='rgb(255,255,255)',
-            title=ylab
-        ),
+            yaxis=dict(
+                zerolinecolor='rgb(255,255,255)',
+                gridcolor='rgb(255,255,255)',
+                title=ylab
+            ),
 
-        annotations=[
-            dict(
-                text=annotation['text'],
-                x=annotation['xloc'],
-                y=annotation['yloc'],
-                showarrow=False
-            )
-        ]
+            annotations=[
+                dict(
+                    text=annotation['text'],
+                    x=annotation['xloc'],
+                    y=annotation['yloc'],
+                    showarrow=False
+                )
+            ]
 
-    )
+        )
 
     # create figure
     fig = go.Figure(data=data, layout=layout)
