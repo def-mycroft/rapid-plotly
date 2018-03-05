@@ -1,11 +1,11 @@
-"""normal barplot"""
+"""Creates a barpot"""
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np
 import pandas as pd
 
 
-def create_trace(x_vals, y_vals, text, color, error=None):
+def create_trace(x_vals, y_vals, text, color, error=None, disable_text=None):
     """Creates trace for barplot"""
 
     error_y = dict()
@@ -31,14 +31,16 @@ def create_trace(x_vals, y_vals, text, color, error=None):
         marker=dict(
             color=color
         ),
-        error_y=error_y
+        error_y=error_y,
+        hoverinfo=disable_text
     )
     return trace
 
 
 def chart(in_data, filename,
-          title='title', xlab='xlab', ylab='ylab',
-          colors=None, annotation={'text': '', 'xloc': 0, 'yloc': 1}):
+          title='title', xlab='xlab', ylab='ylab', y2lab='y2lab', 
+          custom_trace=None, colors=None, visible_y2=False, disable_text=None,
+          annotation={'text': '', 'xloc': 0, 'yloc': 1}):
     """Creates a normal barplot
 
     in_data is a dataframe containing columns 'x', 'y' and 'text' 
@@ -48,6 +50,11 @@ def chart(in_data, filename,
 
     Optionally add an 'error' column to in_data which will set the 
     error bars for the plot.
+
+    Can add a trace by passing a list with trace as custom_trace.
+
+    Pass 'text' to disable_text to suppress default hovertext (will show
+    only the text from in_data).
 
     Example input:
 
@@ -82,8 +89,13 @@ def chart(in_data, filename,
             in_data[in_data['x'] == category]['y'],
             in_data[in_data['x'] == category]['text'],
             colors[category],
-            in_data[in_data['x'] == category]['error'].values[0]
+            in_data[in_data['x'] == category]['error'].values[0],
+            disable_text=disable_text
         ))
+
+    # add custom traces passed into function
+    if custom_trace != None:
+        data += custom_trace
 
     # create layout
     layout = go.Layout(
@@ -102,6 +114,15 @@ def chart(in_data, filename,
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
             title=ylab
+        ),
+
+        yaxis2=dict(
+            zerolinecolor='rgb(255,255,255)',
+            gridcolor='rgb(255,255,255)',
+            overlaying='y',
+            side='right',
+            title=y2lab,
+            visible=visible_y2
         ),
 
         annotations=[
