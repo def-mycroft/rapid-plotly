@@ -21,6 +21,8 @@ def create_trace(x_vals, y_vals, text, color, error=None, disable_text=None):
         error_y = {
             'type': 'data',
             'array': [error],
+            'thickness': 7,
+            'width': int((7*2.5)/2),
             'visible': True
         }
 
@@ -29,8 +31,11 @@ def create_trace(x_vals, y_vals, text, color, error=None, disable_text=None):
         y=y_vals,
         text=text,
         marker=dict(
-            color=color
+            color=color,
         ),
+        #line=dict(
+        #    width=7
+        #),
         error_y=error_y,
         hoverinfo=disable_text
     )

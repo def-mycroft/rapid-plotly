@@ -25,7 +25,8 @@ def chart(x, y, names, filename,
           xlab='xlab', ylab='ylab', title='title',
           annotation_location=(0, 0), return_model=False, xtick_height=False,
           ytick_height=False, hoverinfo=None, suppress_model=False,
-          custom_trace=None, custom_layout=None):
+          custom_trace=None, custom_layout=None,
+          custom_annotations=[]):
     """Given x, y creates a plot"""
 
     # create regression model
@@ -64,7 +65,6 @@ def chart(x, y, names, filename,
         marker=go.Marker(color='#9B2D1E'),
         name='Fit'
     )
-    print('type of trendline', type(trace2))
 
     # setup y ticks
     ydtick = ''
@@ -89,14 +89,13 @@ def chart(x, y, names, filename,
             'showarrow':False
         }
     ]
-
-    # TODO here could be where custom annotations are added 
+    annotations += custom_annotations
 
     # create data list
     data = [trace1, trace2]
 
     if suppress_model:
-        annotations = []
+        annotations[0]['visible'] = False
         del data[-1]
 
     # add custom traces passed into function 
