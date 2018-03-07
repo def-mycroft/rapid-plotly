@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 
 
-def create_trace(x_vals, y_vals, text, color, error=None, disable_text=None):
+def create_trace(x_vals, y_vals, text, color,
+                 error=None, disable_text=None, barwidth=7):
     """Creates trace for barplot"""
 
     error_y = dict()
@@ -21,8 +22,8 @@ def create_trace(x_vals, y_vals, text, color, error=None, disable_text=None):
         error_y = {
             'type': 'data',
             'array': [error],
-            'thickness': 7,
-            'width': int((7*2.5)/2),
+            'thickness': barwidth,
+            'width': int((barwidth * 2.5) / 2),
             'visible': True
         }
 
@@ -33,7 +34,7 @@ def create_trace(x_vals, y_vals, text, color, error=None, disable_text=None):
         marker=dict(
             color=color,
         ),
-        #line=dict(
+        # line=dict(
         #    width=7
         #),
         error_y=error_y,
@@ -43,9 +44,9 @@ def create_trace(x_vals, y_vals, text, color, error=None, disable_text=None):
 
 
 def chart(in_data, filename,
-          title='title', xlab='xlab', ylab='ylab', y2lab='y2lab', 
+          title='title', xlab='xlab', ylab='ylab', y2lab='y2lab',
           custom_trace=None, colors=None, visible_y2=False, disable_text=None,
-          annotation={'text': '', 'xloc': 0, 'yloc': 1}):
+          annotation={'text': '', 'xloc': 0, 'yloc': 1}, barwidth=7):
     """Creates a normal barplot
 
     in_data is a dataframe containing columns 'x', 'y' and 'text' 
@@ -60,6 +61,8 @@ def chart(in_data, filename,
 
     Pass 'text' to disable_text to suppress default hovertext (will show
     only the text from in_data).
+
+    The barwidth arg sets the width, in pixels, of the error bars.
 
     Example input:
 
@@ -95,7 +98,8 @@ def chart(in_data, filename,
             in_data[in_data['x'] == category]['text'],
             colors[category],
             in_data[in_data['x'] == category]['error'].values[0],
-            disable_text=disable_text
+            disable_text=disable_text,
+            barwidth=barwidth
         ))
 
     # add custom traces passed into function
