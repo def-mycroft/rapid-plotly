@@ -53,3 +53,6 @@ def chart(data, filename,
 
     # output
     plot(fig, filename=filename)
+
+    # return figure
+    return fig
