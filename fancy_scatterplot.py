@@ -25,7 +25,7 @@ def chart(x, y, names, filename,
           xlab='xlab', ylab='ylab', title='title',
           annotation_location=(0, 0), return_model=False, xtick_height=False,
           ytick_height=False, hoverinfo=None, suppress_model=False,
-          custom_trace=None, custom_layout=None,
+          custom_trace=None, custom_layout=None, hovermode=None,
           custom_annotations=[]):
     """Given x, y creates a plot"""
 
@@ -123,7 +123,8 @@ def chart(x, y, names, filename,
                 dtick=ydtick
             ),
 
-            annotations=annotations
+            annotations=annotations,
+            hovermode=hovermode
         )
     else:
         layout = custom_layout
