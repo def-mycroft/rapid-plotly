@@ -27,8 +27,11 @@ def chart(x, y, names, filename,
           ytick_height=False, hoverinfo=None, suppress_model=False,
           custom_trace=None, custom_layout=None, hovermode=None,
           custom_annotations=[]):
-    """Given x, y creates a plot"""
+    """Given x, y creates a plot"
 
+    Pass custom_trace as a list of traces.
+
+    """
     # create regression model
     slope, intercept = np.polyfit(x, y, 1)
     line = slope * x + intercept
@@ -100,7 +103,7 @@ def chart(x, y, names, filename,
 
     # add custom traces passed into function 
     if custom_trace != None:
-        data.append(custom_trace)
+        data += custom_trace
 
     # if no layout is passed, use below layout, else use passed layout
     if custom_layout == None:
