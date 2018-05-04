@@ -22,7 +22,7 @@ from scipy.stats import pearsonr as correl
 
 
 def chart(x, y, names, filename,
-          xlab='xlab', ylab='ylab', title='title',
+          xlab='xlab', ylab='ylab', title='title', tracename='',
           annotation_location=(0, 0), return_model=False, xtick_height=False,
           ytick_height=False, hoverinfo=None, suppress_model=False,
           custom_trace=None, custom_layout=None, hovermode=None,
@@ -32,6 +32,10 @@ def chart(x, y, names, filename,
     Pass custom_trace as a list of traces.
 
     """
+    # set tracename 
+    if tracename == '':
+        tracename = ylab
+
     # create regression model
     slope, intercept = np.polyfit(x, y, 1)
     line = slope * x + intercept
@@ -55,7 +59,7 @@ def chart(x, y, names, filename,
         y=y,
         mode='markers',
         marker=go.Marker(color='#3D3C28'),
-        name=ylab,
+        name=tracename,
         hoverinfo=hoverinfo,
         text=names,
     )
