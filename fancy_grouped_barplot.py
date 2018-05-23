@@ -6,12 +6,14 @@ import pandas as pd
 
 def chart(in_data, filename, names1, names2,
         title='title', xlab='xlab', ylab='ylab', error_a='', error_b='',
-        barwidth=7):
+        barwidth=7, hoverinfo=None, custom_annotations=[]):
     """Creates grouped barplot
 
     For two groups only. Could create another script for more groups. 
 
     Pass in_data. in_data is mean to be a dataframe in this manner:
+
+    Pass "'hoverinfo='text'" to strip the default values from the hovertext.
 
                            bar1           bar2
     x_category1            3.13          15.84
@@ -37,7 +39,7 @@ def chart(in_data, filename, names1, names2,
         else:
             error_y = {
                 'type': 'data',
-                'array': [error],
+                'array': error,
                 'thickness': barwidth,
                 'width': int((barwidth * 2.5) / 2),
                 'visible': True
@@ -49,8 +51,9 @@ def chart(in_data, filename, names1, names2,
             x=list(in_data.index),
             y=in_data[in_data.columns[0]],
             name=in_data.columns[0],
-            text=['n = ' + str(x) for x in names1],
+            text=names1,
             marker=go.Marker(color='#3D3C28'),
+            hoverinfo=hoverinfo,
             error_y=create_errors(error_a)
     )
 
@@ -58,8 +61,9 @@ def chart(in_data, filename, names1, names2,
             x=list(in_data.index),
             y=in_data[in_data.columns[1]],
             name=in_data.columns[1],
-            text=['n = ' + str(x) for x in names2],
+            text=names2,
             marker=go.Marker(color='#9B2D1E'),
+            hoverinfo=hoverinfo,
             error_y=create_errors(error_b)
     )
 
@@ -81,7 +85,9 @@ def chart(in_data, filename, names1, names2,
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
             title=ylab,
-        )
+        ),
+
+        annotations=custom_annotations
     )
 
     # create figure
