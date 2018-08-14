@@ -30,6 +30,8 @@ def chart(in_data, filename, colors,
     bar in each of the columns, i.e. a list of length equal to
     len(in_data.index).
 
+    TODO - have a `DepreciationWarning` related to `Marker`. 
+
     """
     def create_errors(error):
         """Creates error dict"""
