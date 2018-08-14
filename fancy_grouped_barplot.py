@@ -91,7 +91,8 @@ def chart(in_data, filename, colors,
             title=ylab,
         ),
 
-        annotations=custom_annotations
+        annotations=custom_annotations,
+        hovermode='closest'
     )
 
     # create figure
