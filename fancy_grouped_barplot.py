@@ -4,16 +4,12 @@ import numpy as np
 import pandas as pd
 
 
-def chart(in_data, filename, names1, names2,
-        title='title', xlab='xlab', ylab='ylab', error_a='', error_b='',
-        barwidth=7, hoverinfo=None, custom_annotations=[]):
+def chart(in_data, filename, colors,
+        title='title', xlab='xlab', ylab='ylab', names='', error_a='',
+        error_b='', barwidth=7, hoverinfo=None, custom_annotations=[]):
     """Creates grouped barplot
 
-    For two groups only. Could create another script for more groups. 
-
     Pass in_data. in_data is mean to be a dataframe in this manner:
-
-    Pass "'hoverinfo='text'" to strip the default values from the hovertext.
 
                            bar1           bar2
     x_category1            3.13          15.84
@@ -21,13 +17,18 @@ def chart(in_data, filename, names1, names2,
 
     Where in_data index is the x_categories and bar1/bar2 are like data.
 
+    Pass "'hoverinfo='text'" to strip the default values from the hovertext.
+
     In the above example, the 3.13 and 15.84 bars would be grouped 
     together and the 6.67 and 6.08 bars would be grouped together. Bar1
     would be on the left of each bar group.
 
-    There can only be two columns in in_data, but there can be unlimited 
-    rows, which means that there can be many categories, but only two 
-    categorized datasets (i.e. each barroup can only contain two bars).
+    There isn't an expected limit on the width of `in_data`.
+
+    The `names` arg is expected to be a dict where the keys are the 
+    columns of `in_data` and the values are names for each category
+    bar in each of the columns, i.e. a list of length equal to
+    len(in_data.index).
 
     """
     def create_errors(error):
@@ -47,27 +48,28 @@ def chart(in_data, filename, names1, names2,
 
         return error_y
 
-    trace1 = go.Bar(
-            x=list(in_data.index),
-            y=in_data[in_data.columns[0]],
-            name=in_data.columns[0],
-            text=names1,
-            marker=go.Marker(color='#3D3C28'),
-            hoverinfo=hoverinfo,
-            error_y=create_errors(error_a)
-    )
+    def create_trace(col, hoverinfo, names):
+        """Creats a trace"""
+        trace = go.Bar(
+                x=list(in_data.index),
+                y=in_data[col],
+                name=col,
+                text=names[col],
+                marker=go.Marker(color=colors[col]),
+                hoverinfo=hoverinfo,
+                error_y=create_errors(error_a)
+        )
 
-    trace2 = go.Bar(
-            x=list(in_data.index),
-            y=in_data[in_data.columns[1]],
-            name=in_data.columns[1],
-            text=names2,
-            marker=go.Marker(color='#9B2D1E'),
-            hoverinfo=hoverinfo,
-            error_y=create_errors(error_b)
-    )
+        return trace
 
-    data = [trace1, trace2]
+    # setup names if nothing is passed
+    if names == '':
+        names = dict(zip(in_data.columns, in_data.columns))
+
+    # create list of traces 
+    data = list()
+    for col in in_data.columns:
+        data.append(create_trace(col, hoverinfo, names))
 
     # create layout
     layout = go.Layout(
