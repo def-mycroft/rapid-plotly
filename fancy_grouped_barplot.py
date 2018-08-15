@@ -99,6 +99,6 @@ def chart(in_data, filename, colors,
     fig = go.Figure(data=data, layout=layout)
 
     # output
-    plot(fig, filename=filename)
+    plot(fig, filename=filename, auto_open=False)
 
     return fig
