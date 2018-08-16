@@ -30,7 +30,13 @@ def chart(in_data, filename, colors,
     bar in each of the columns, i.e. a list of length equal to
     len(in_data.index).
 
+    The `colors` arg is a dict mapping columns of `in_data` to html
+    colors on the graph
+
     TODO - have a `DepreciationWarning` related to `Marker`. 
+
+    TODO - errors functionality is broken right now, can fix. Prob
+    need to pass a df with errors.
 
     """
     def create_errors(error):
