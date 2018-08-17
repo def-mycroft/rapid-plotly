@@ -4,9 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-def chart(in_data, filename, colors,
-        title='title', xlab='xlab', ylab='ylab', names='', error_a='',
-        error_b='', barwidth=7, hoverinfo=None, custom_annotations=[]):
+def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab='ylab', names='', error_barwidth=7, hoverinfo=None, custom_annotations=[]):
     """Creates grouped barplot
 
     Pass in_data. in_data is mean to be a dataframe in this manner:
@@ -17,7 +15,8 @@ def chart(in_data, filename, colors,
 
     Where in_data index is the x_categories and bar1/bar2 are like data.
 
-    Pass "'hoverinfo='text'" to strip the default values from the hovertext.
+    Pass "'hoverinfo='text'" to strip the default values from the
+    hovertext.
 
     In the above example, the 3.13 and 15.84 bars would be grouped 
     together and the 6.67 and 6.08 bars would be grouped together. Bar1
@@ -28,15 +27,18 @@ def chart(in_data, filename, colors,
     The `names` arg is expected to be a dict where the keys are the 
     columns of `in_data` and the values are names for each category
     bar in each of the columns, i.e. a list of length equal to
-    len(in_data.index).
+    len(in_data.index). Each error value is the "+/-" value for the bar,
+    e.g. if the cell value is "15", then the error bar will be 15 units
+    above and 15 units below the top of the bar.
 
     The `colors` arg is a dict mapping columns of `in_data` to html
     colors on the graph
 
-    TODO - have a `DepreciationWarning` related to `Marker`. 
+    Error bars can be added by passing a dataframe with the same
+    index and columns as `in_data`, where each cell value is the error
+    for the corresponding bar in `in_data`. 
 
-    TODO - errors functionality is broken right now, can fix. Prob
-    need to pass a df with errors.
+    TODO - have a `DepreciationWarning` related to `Marker`. 
 
     """
     def create_errors(error):
@@ -49,15 +51,21 @@ def chart(in_data, filename, colors,
             error_y = {
                 'type': 'data',
                 'array': error,
-                'thickness': barwidth,
-                'width': int((barwidth * 2.5) / 2),
+                'thickness': error_barwidth,
+                'width': int((error_barwidth * 2.5) / 2),
                 'visible': True
             }
 
         return error_y
 
-    def create_trace(col, hoverinfo, names):
+    def create_trace(col, hoverinfo, names, errors):
         """Creats a trace"""
+
+        if isinstance(errors, str):
+            error_y = {}
+        else:
+            error_y = create_errors(errors[col])
+
         trace = go.Bar(
                 x=list(in_data.index),
                 y=in_data[col],
@@ -65,19 +73,19 @@ def chart(in_data, filename, colors,
                 text=names[col],
                 marker=go.Marker(color=colors[col]),
                 hoverinfo=hoverinfo,
-                error_y=create_errors(error_a)
+                error_y=error_y
         )
 
         return trace
 
-    # setup names if nothing is passed
+    # setup names and errors if nothing is passed
     if names == '':
         names = dict(zip(in_data.columns, in_data.columns))
 
     # create list of traces 
     data = list()
     for col in in_data.columns:
-        data.append(create_trace(col, hoverinfo, names))
+        data.append(create_trace(col, hoverinfo, names, errors))
 
     # create layout
     layout = go.Layout(
