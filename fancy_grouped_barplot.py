@@ -79,7 +79,7 @@ def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab
         return trace
 
     # setup names and errors if nothing is passed
-    if names == '':
+    if isinstance(names, str):
         names = dict(zip(in_data.columns, in_data.columns))
 
     # create list of traces 
