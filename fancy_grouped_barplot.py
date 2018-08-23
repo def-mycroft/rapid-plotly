@@ -38,8 +38,6 @@ def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab
     index and columns as `in_data`, where each cell value is the error
     for the corresponding bar in `in_data`. 
 
-    TODO - have a `DepreciationWarning` related to `Marker`. 
-
     """
     def create_errors(error):
         """Creates error dict"""
@@ -71,7 +69,7 @@ def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab
                 y=in_data[col],
                 name=col,
                 text=names[col],
-                marker=go.Marker(color=colors[col]),
+                marker=go.bar.Marker(color=colors[col]),
                 hoverinfo=hoverinfo,
                 error_y=error_y
         )
