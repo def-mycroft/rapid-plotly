@@ -27,16 +27,23 @@ def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab
     The `names` arg is expected to be a dict where the keys are the 
     columns of `in_data` and the values are names for each category
     bar in each of the columns, i.e. a list of length equal to
-    len(in_data.index). Each error value is the "+/-" value for the bar,
-    e.g. if the cell value is "15", then the error bar will be 15 units
-    above and 15 units below the top of the bar.
+    len(in_data.index). 
 
     The `colors` arg is a dict mapping columns of `in_data` to html
     colors on the graph
 
     Error bars can be added by passing a dataframe with the same
     index and columns as `in_data`, where each cell value is the error
-    for the corresponding bar in `in_data`. 
+    for the corresponding bar in `in_data`. Each error value is the 
+    "+/-" value for the bar, e.g. if the cell value is "15", then the
+    error bar will be 15 units above and 15 units below the top of 
+    the bar.
+
+    TODO - `colors` and `names` need to be a dataframe instead of a 
+    dict of lists. 
+    
+    TODO - need to be able to pass `colors=''` for default colors, 
+    makes for faster development. 
 
     """
     def create_errors(error):
