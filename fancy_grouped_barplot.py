@@ -4,7 +4,18 @@ import numpy as np
 import pandas as pd
 
 
-def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab='ylab', names='', error_barwidth=7, hoverinfo=None, custom_annotations=[]):
+def default_colors(keys, colors=None):
+    """Generates a repeating color pallette"""
+    
+    if colors == None:
+        colors = ['#232C65', '#840032', '#E59500', '#00A6FB',
+                  '#02040F', '#E4572E']
+    colors = colors * (len(keys)+1)
+    
+    return dict(zip(keys, colors[:len(keys)]))
+
+
+def chart(in_data, filename, colors=None, errors='', title='title', xlab='xlab', ylab='ylab', names='', error_barwidth=7, hoverinfo=None, custom_annotations=[]):
     """Creates grouped barplot
 
     Pass in_data. in_data is mean to be a dataframe in this manner:
@@ -39,6 +50,8 @@ def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab
     error bar will be 15 units above and 15 units below the top of 
     the bar.
 
+    TODO - create method of editing axis values by keyword args.
+
     TODO - `colors` and `names` need to be a dataframe instead of a 
     dict of lists. 
     
@@ -46,6 +59,9 @@ def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab
     makes for faster development. 
 
     """
+    if colors == None:
+        colors = default_colors(in_data.columns)
+
     def create_errors(error):
         """Creates error dict"""
 
@@ -102,6 +118,7 @@ def chart(in_data, filename, colors, errors='', title='title', xlab='xlab', ylab
             zerolinecolor='rgb(255,255,255)',
             gridcolor='rgb(255,255,255)',
             title=xlab,
+            tickangle=30
         ),
 
         yaxis=dict(
