@@ -1,11 +1,16 @@
 
+# ignore office temp files 
+~$*
+
+# ignore data folder
+**/Data
+
 # don't keep pycache files
 **/__pycache__/
-**/__pycache__/*
+
+# don't keep ipynb checkpoints 
+**/.ipynb_checkpoints/
 
 # don't keep pyc files 
 *.pyc
-
-# ignore editor files 
-.*.swp
 
