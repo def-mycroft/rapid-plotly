@@ -29,7 +29,7 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors, error_barwidth)
 
 def create_graph(in_data, filepath='', colors=None, errors='', title='title',
                  xlab='xlab', ylab='ylab', names='', error_barwidth=7,
-                 hoverinfo=None, custom_annotations=[]):
+                 hoverinfo=None, annotations=[]):
     """Creates grouped barplot
 
     Pass in_data. in_data is mean to be a dataframe in this manner:
@@ -90,7 +90,7 @@ def create_graph(in_data, filepath='', colors=None, errors='', title='title',
     helpers.layout['title'] = title
     helpers.layout['xaxis']['title'] = xlab
     helpers.layout['yaxis']['title'] = ylab
-    helpers.layout['annotations'] = custom_annotations
+    helpers.layout['annotations'] = annotations
 
     layout = go.Layout(helpers.layout)
 
