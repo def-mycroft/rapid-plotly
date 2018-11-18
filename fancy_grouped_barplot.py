@@ -2,20 +2,33 @@ import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np
 import pandas as pd
+import helpers
 
 
-def default_colors(keys, colors=None):
-    """Generates a repeating color pallette"""
-    
-    if colors == None:
-        colors = ['#232C65', '#840032', '#E59500', '#00A6FB',
-                  '#02040F', '#E4572E']
-    colors = colors * (len(keys)+1)
-    
-    return dict(zip(keys, colors[:len(keys)]))
+def create_trace(in_data, colors, col, hoverinfo, names, errors, error_barwidth):
+    """Creats a trace"""
+
+    if isinstance(errors, str):
+        error_y = {}
+    else:
+        error_y = helpers.create_errors(errors[col], error_barwidth)
+
+    trace = go.Bar(
+            x=list(in_data.index),
+            y=in_data[col],
+            name=col,
+            text=names[col],
+            marker=go.bar.Marker(color=colors[col]),
+            hoverinfo=hoverinfo,
+            error_y=error_y
+    )
+
+    return trace
 
 
-def chart(in_data, filename, colors=None, errors='', title='title', xlab='xlab', ylab='ylab', names='', error_barwidth=7, hoverinfo=None, custom_annotations=[]):
+def chart(in_data, filename, colors=None, errors='', title='title', xlab='xlab',
+          ylab='ylab', names='', error_barwidth=7, hoverinfo=None,
+          custom_annotations=[]):
     """Creates grouped barplot
 
     Pass in_data. in_data is mean to be a dataframe in this manner:
@@ -60,44 +73,7 @@ def chart(in_data, filename, colors=None, errors='', title='title', xlab='xlab',
 
     """
     if colors == None:
-        colors = default_colors(in_data.columns)
-
-    def create_errors(error):
-        """Creates error dict"""
-
-        if isinstance(error, str):
-            error_y = {}
-
-        else:
-            error_y = {
-                'type': 'data',
-                'array': error,
-                'thickness': error_barwidth,
-                'width': int((error_barwidth * 2.5) / 2),
-                'visible': True
-            }
-
-        return error_y
-
-    def create_trace(col, hoverinfo, names, errors):
-        """Creats a trace"""
-
-        if isinstance(errors, str):
-            error_y = {}
-        else:
-            error_y = create_errors(errors[col])
-
-        trace = go.Bar(
-                x=list(in_data.index),
-                y=in_data[col],
-                name=col,
-                text=names[col],
-                marker=go.bar.Marker(color=colors[col]),
-                hoverinfo=hoverinfo,
-                error_y=error_y
-        )
-
-        return trace
+        colors = helpers.default_colors(in_data.columns)
 
     # setup names and errors if nothing is passed
     if isinstance(names, str):
@@ -106,30 +82,16 @@ def chart(in_data, filename, colors=None, errors='', title='title', xlab='xlab',
     # create list of traces 
     data = list()
     for col in in_data.columns:
-        data.append(create_trace(col, hoverinfo, names, errors))
+        data.append(create_trace(in_data, colors, col, hoverinfo, names,
+                                 errors, error_barwidth))
 
     # create layout
-    layout = go.Layout(
+    helpers.layout['title'] = title
+    helpers.layout['xaxis']['title'] = xlab
+    helpers.layout['yaxis']['title'] = ylab
+    helpers.layout['annotations'] = custom_annotations
 
-        title=title,
-        plot_bgcolor='rgb(229, 229, 229)',
-
-        xaxis=dict(
-            zerolinecolor='rgb(255,255,255)',
-            gridcolor='rgb(255,255,255)',
-            title=xlab,
-            tickangle=30
-        ),
-
-        yaxis=dict(
-            zerolinecolor='rgb(255,255,255)',
-            gridcolor='rgb(255,255,255)',
-            title=ylab,
-        ),
-
-        annotations=custom_annotations,
-        hovermode='closest'
-    )
+    layout = go.Layout(helpers.layout)
 
     # create figure
     fig = go.Figure(data=data, layout=layout)
