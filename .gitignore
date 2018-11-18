@@ -1,4 +1,7 @@
 
+# ignore editor swp files
+*.swp
+
 # ignore office temp files 
 ~$*
 
