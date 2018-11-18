@@ -26,7 +26,7 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors, error_barwidth)
     return trace
 
 
-def chart(in_data, filename, colors=None, errors='', title='title', xlab='xlab',
+def create_graph(in_data, filename, colors=None, errors='', title='title', xlab='xlab',
           ylab='ylab', names='', error_barwidth=7, hoverinfo=None,
           custom_annotations=[]):
     """Creates grouped barplot
