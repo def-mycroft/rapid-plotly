@@ -12,11 +12,11 @@ import helpers
 output_graph = helpers.output_graph
 
 
-def create_trace(in_data, col, colors, names, hoverinfo):
-    """Creates a scatter trace for a column in `in_data`"""
+def create_trace(x, y, col, colors, names, hoverinfo):
+    """Creates a scatter trace for a column in `_values` objects"""
     trace = go.Scatter(
-        x=in_data.index,
-        y=in_data[col],
+        x=x[col],
+        y=y[y.columns[0]],
         mode='markers',
         marker=go.scatter.Marker(color=colors[col]),
         hoverinfo=hoverinfo,
@@ -27,7 +27,7 @@ def create_trace(in_data, col, colors, names, hoverinfo):
     return trace
 
 
-def create_graph(in_data, filepath='', names='', errors='',
+def create_graph(x_data, y_data, filepath='', names='', errors='',
                  title='title', xlab='xlab', ylab='ylab', colors='', layout='',
                  hoverinfo=None, annotations=[]):
     """Creates a scatterplot
@@ -41,24 +41,21 @@ def create_graph(in_data, filepath='', names='', errors='',
     # use default colors if none are passed
     # otherwise use passed dataframe
     if isinstance(colors, str):
-        colors = in_data.copy()
+        colors = x_data[0].copy()
         colors.loc[:, :] = '#232C65'
 
     # setup names and errors if nothing is passed
     if isinstance(names, str):
-        names = in_data.copy()
-
-    if xlab == 'xlab':
-        xlab = in_data.index.name
-
-    if ylab == 'ylab':
-        ylab = in_data.columns[0]
+        names = x_data[0].copy()
 
     # create list of traces
     data = list()
 
-    for col in in_data.columns:
-        data.append(create_trace(in_data, col, colors, names, hoverinfo))
+    for i in range(len(x_data)):
+        sl = x_data[i]
+        for col in sl.columns:
+            data.append(create_trace(x_data[i], y_data[i], col, colors,
+                                     names, hoverinfo))
 
     # create layout
     # if no layout is passed, use default layout from helpers
