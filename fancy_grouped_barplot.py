@@ -3,6 +3,7 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np
 import pandas as pd
 import helpers
+output_graph = helpers.output_graph
 
 
 def create_trace(in_data, colors, col, hoverinfo, names, errors, error_barwidth):
@@ -26,9 +27,9 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors, error_barwidth)
     return trace
 
 
-def create_graph(in_data, filename, colors=None, errors='', title='title', xlab='xlab',
-          ylab='ylab', names='', error_barwidth=7, hoverinfo=None,
-          custom_annotations=[]):
+def create_graph(in_data, filepath='', colors=None, errors='', title='title',
+                 xlab='xlab', ylab='ylab', names='', error_barwidth=7,
+                 hoverinfo=None, custom_annotations=[]):
     """Creates grouped barplot
 
     Pass in_data. in_data is mean to be a dataframe in this manner:
@@ -97,6 +98,6 @@ def create_graph(in_data, filename, colors=None, errors='', title='title', xlab=
     fig = go.Figure(data=data, layout=layout)
 
     # output
-    plot(fig, filename=filename, auto_open=False)
+    output_graph(filepath, fig)
 
     return fig

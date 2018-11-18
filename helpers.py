@@ -1,4 +1,7 @@
-
+import plotly.graph_objs as go
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import numpy as np
+import pandas as pd
 
 layout = {
     'hovermode': 'closest',
@@ -9,6 +12,14 @@ layout = {
     'yaxis': {'gridcolor': 'rgb(255,255,255)', 'title': 'ylab',
               'zerolinecolor': 'rgb(255,255,255)'}
 }
+
+def output_graph(filepath, fig):
+    """Given a fig object, generates a graph"""
+    if filepath == '':
+        init_notebook_mode(connected=True)
+        iplot(fig)
+    else:
+        plot(fig, filename=filepath, auto_open=False)
 
 def create_errors(error, error_barwidth):
     """Creates error dict"""
