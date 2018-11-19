@@ -18,7 +18,9 @@ Current features:
 
 ## Basic Usage
 
-The below shows the basic functionality of `rapid_plotly`. The [Jupyter notebook included in the examples folder of this repo][2] contains more comprehensive examples. 
+The below shows the basic functionality of `rapid_plotly`. The [Jupyter notebook
+ included in the examples folder of this repo][2] contains more comprehensive
+examples. 
 
 Given a pandas dataframe `in_data` in this form: 
 
@@ -40,9 +42,11 @@ fig = barplot.create_graph(**args)
 
 ```
 
-This creates a barplot where each bar is labeled by the index of `in_data` and the height of each bar is determined by `in_data['mpg']`.
+This creates a barplot where each bar is labeled by the index of `in_data` and
+the height of each bar is determined by `in_data['mpg']`.
 
-After previewing the graph in Jupyter, the graph can be written to an html file by passing `fig` to `rapid_plotly.barplot.output_graph`:
+After previewing the graph in Jupyter, the graph can be written to an html file
+by passing `fig` to `rapid_plotly.barplot.output_graph`:
 
 
 ```py
