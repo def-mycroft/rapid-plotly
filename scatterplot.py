@@ -13,7 +13,7 @@ output_graph = helpers.output_graph
 
 
 def create_trace(x, y, col, colors, names, hoverinfo):
-    """Creates a scatter trace for a column in `_values` objects"""
+    """Creates a scatter trace"""
     trace = go.Scatter(
         x=x[col],
         y=y[y.columns[0]],
@@ -27,24 +27,51 @@ def create_trace(x, y, col, colors, names, hoverinfo):
     return trace
 
 
-def create_graph(x_data, y_data, filepath='', names='', errors='',
-                 title='title', xlab='xlab', ylab='ylab', colors='', layout='',
-                 hoverinfo=None, annotations=[]):
+def create_graph(x_data, y_data, filepath='', names='', colors='', title='title', xlab='xlab', ylab='ylab', layout='', hoverinfo=None, annotations=[]):
     """Creates a scatterplot
 
-    Infers axis labels from `in_data`
+    `x_data` and `y_data` are expected to be dataframes or lists of 
+    dataframes representing the x values and y values of the data. When
+    passing a list of dataframes, the order of the list is used to 
+    match up x and y values. 
 
-    TODO - Write docs 
+    If a filepath is passed, the graph will be written to an html file,
+    otherwise the graph will be displayed in-line (when calling from a
+    Jupyter notebook).
 
-    TODO - split x and y values in `in_data`, can't use index for x values
+    A dataframe `names` can be passed where each column of the dataframe
+    corresponds to the column name of `x_data` or to the names in each
+    dataframe in the list `x_data`.
+
+    A dataframe `colors` can be passed in a similar fashion to `names`, 
+    where each cell is a hex color code. 
+
+    The `title`, `xlab` and `ylab` args are text arguments which 
+    correspond to the main title, x label and y label of the graph. 
+
+    The annotations arg is expected to be a series of dicts in the form:
+
+        {'text':'annotation text', 'x':10, 'y':15, 'showarrow'=False}
+
+    By default, `plotly` defines the 'x' and 'y' values in terms of the 
+    data on the graph. Annotations have a depth of features in `plotly`,
+    refer to `plotly` documentation for annotation options.
+
+    Axis labels are inferred from columns in `x_data` and `y_data`.
+
     """
+    # if x_data isn't a list, put it into a list  
+    if not isinstance(x_data, list):
+        x_data = [x_data]
+        y_data = [y_data]
+
     # use default colors if none are passed
     # otherwise use passed dataframe
     if isinstance(colors, str):
         colors = x_data[0].copy()
         colors.loc[:, :] = '#232C65'
 
-    # setup names and errors if nothing is passed
+    # setup names and if nothing is passed
     if isinstance(names, str):
         names = x_data[0].copy()
 
