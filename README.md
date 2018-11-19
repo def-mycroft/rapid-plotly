@@ -1,8 +1,8 @@
-# Functionality to rapidly create Plotly graphs 
+# A workflow tool to rapidly create Plotly graphs 
 
 The [Plotly][1] library facilitates the creation of beautiful and interactive
-graphs. However, it takes at least several hundred lines of code to create a
-presentable Plotly graph. Writing hundreds of lines of code every time a graph
+graphs. However, it can easily require several hundred lines of code to create
+a presentable Plotly graph. Writing hundreds of lines of code every time a graph 
 is needed isn't feasible for professionals who work with data and it isn't fun
 for people working on side projects.
 
