@@ -8,7 +8,7 @@ import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np
 import pandas as pd
-import helpers
+from . import helpers
 output_graph = helpers.output_graph
 
 
