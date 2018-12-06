@@ -99,6 +99,6 @@ def create_graph(x_data, y_data, filepath='', names='', colors='', title='title'
     fig = go.Figure(data=data, layout=layout)
 
     # output
-    output_graph(filepath, fig)
+    output_graph(filepath=filepath, fig=fig)
 
     return fig

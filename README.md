@@ -73,6 +73,17 @@ And then install using `pip`:
 pip install .
 ```
 
+`rapid_plotly` includes functionality to write visualizations to
+fully-interactive `.html` files or, alternatively, to `.png` files. 
+
+Libraries `psutil` and `plotly-orca` need to be installed to write `.png` files. 
+The below `conda` commands can be used to install `psutil` and `orca`:
+
+```
+conda install psutil
+conda install -c plotly plotly-orca
+```
+
 ## How to Contribute 
 
 The goal of `rapid_plotly` is to create functionality to rapidly and effectively

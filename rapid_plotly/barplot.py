@@ -142,6 +142,6 @@ def create_graph(in_data, filepath='', names='', errors='',
     fig = go.Figure(data=data, layout=layout)
 
     # output
-    output_graph(filepath, fig)
+    output_graph(filepath=filepath, fig=fig)
 
     return fig

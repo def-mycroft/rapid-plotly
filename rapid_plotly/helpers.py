@@ -2,6 +2,7 @@
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np
+import plotly.io as pio
 import pandas as pd
 
 # default layout
@@ -16,18 +17,30 @@ layout = {
 }
 
 
-def output_graph(filepath, fig):
+def to_image(fig, filepath, width=1000, height=450):
+    """Writes plotly graph to image"""
+    pio.write_image(fig, filepath, width=width, height=height)
+    
+
+def output_graph(fig, filepath, width=2000, height=900):
     """Given a Plotly fig, generates a graph
 
     If `filepath` is an empty string, display inline notebook, otherwise
-    write an html file to `filepath`.
+    write a file to `filepath`. If `filepath` contains the file extension
+    `.html`, a full interactive `.html` file is generated, if the file
+    extension is `.png` a `.png` file is written.
+
+    For the `.png` option, `width` and `height` are in pixels.
 
     """
     if filepath == '':
         init_notebook_mode(connected=True)
         iplot(fig)
-    else:
+    elif '.html' in filepath:
         plot(fig, filename=filepath, auto_open=False)
+        
+    elif '.png' in filepath:
+        to_image(fig, filepath, width=width, height=height)
 
 
 def default_colors(keys, colors=None):
