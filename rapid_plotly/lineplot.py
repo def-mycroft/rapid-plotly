@@ -6,13 +6,14 @@ barplot, either in a Jupyter notebook or as an html file.
 """
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+from copy import copy
 import numpy as np
 import pandas as pd
-import helpers
+from . import helpers
 output_graph = helpers.output_graph
 
 
-def create_trace(in_data, colors, col, hoverinfo, names):
+def create_trace(in_data, colors, col, hoverinfo, names, yaxis=None):
     """Creates a barplot trace for a column in `in_data`"""
     trace = go.Scatter(
         x=list(in_data.index),
@@ -21,22 +22,22 @@ def create_trace(in_data, colors, col, hoverinfo, names):
         name=col,
         text=names[col],
         marker=go.scatter.Marker(color=colors[col]),
-        hoverinfo=hoverinfo
+        hoverinfo=hoverinfo,
+        yaxis=yaxis
     )
 
     return trace
 
 
-def create_graph(in_data, filepath='', names='', errors='',
+def create_graph(in_data, filepath='', names='', alt_y=False,
                  title='title', xlab='xlab', ylab='ylab', colors='',
-                 layout='', hoverinfo=None, annotations=[]):
-    """Creates grouped barplot
+                 layout='', hoverinfo=None, annotations=[], aux_traces=[]):
+    """Creates a line plot 
 
-    The `in_data` arg must be a dataframe in the form:
+    Possible to add lines on alternate axes using `create_trace` and the
+    `aux_traces` arg.
 
-                           bar1           bar2
-    x_category1            3.13          15.84
-    x_category2            6.67           6.08
+    TODO - write docstring.
 
     """
     # use default colors if none are passed
@@ -51,8 +52,16 @@ def create_graph(in_data, filepath='', names='', errors='',
     # create list of traces
     data = list()
 
+    if alt_y:
+        yaxis='y1' 
+
     for col in in_data.columns:
-        data.append(create_trace(in_data, colors, col, hoverinfo, names))
+        data.append(create_trace(in_data, colors, col, hoverinfo, names, yaxis))
+
+    # if more than one trace, add multiple traces 
+    if len(aux_traces) > 0:
+        for at in aux_traces:
+            data.append(at)
 
     # create layout
     # if no layout is passed, use default layout from helpers
@@ -65,10 +74,17 @@ def create_graph(in_data, filepath='', names='', errors='',
     layout['annotations'] = annotations
     layout = go.Layout(layout)
 
+    if alt_y:
+        y = copy(layout['yaxis'])
+        y['title'] = 'y2lab'
+        y['side'] = 'right'
+        y['overlaying'] = 'y'
+        layout['yaxis2'] = y
+
     # create figure
     fig = go.Figure(data=data, layout=layout)
 
     # output
     output_graph(filepath, fig)
 
-    return fig
+    return fig, layout
