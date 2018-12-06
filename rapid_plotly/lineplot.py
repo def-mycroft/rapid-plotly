@@ -30,8 +30,9 @@ def create_trace(in_data, colors, col, hoverinfo, names, yaxis=None):
 
 
 def create_graph(in_data, filepath='', names='', alt_y=False,
-                 title='title', xlab='xlab', ylab='ylab', colors='',
-                 layout='', hoverinfo=None, annotations=[], aux_traces=[]):
+                 title='title', xlab='xlab', ylab='ylab', y2lab='y2lab', 
+                 colors='', layout='', hoverinfo=None, annotations=[],
+                 aux_traces=[]):
     """Creates a line plot 
 
     Possible to add lines on alternate axes using `create_trace` and the
@@ -76,7 +77,7 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
 
     if alt_y:
         y = copy(layout['yaxis'])
-        y['title'] = 'y2lab'
+        y['title'] = y2lab
         y['side'] = 'right'
         y['overlaying'] = 'y'
         layout['yaxis2'] = y
@@ -87,4 +88,4 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
     # output
     output_graph(filepath, fig)
 
-    return fig, layout
+    return fig
