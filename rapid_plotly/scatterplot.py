@@ -27,7 +27,30 @@ def create_trace(x, y, col, colors, names, hoverinfo):
     return trace
 
 
-def create_graph(x_data, y_data, filepath='', names='', colors='',
+def create_regression(x, y):
+    """Creates a regression line for the graph
+
+    The `r2` value is the "r-squared" or "explained variance" indicator.
+
+    """
+    # create regression line 
+    slope, intercept = np.polyfit(x, y, 1)
+
+    # calculate r2 value 
+    r2 = pd.concat([x, y], axis=1).corr().iloc[0,1] ** 2
+
+    regline = go.Scatter(
+        x=x,
+        y=intercept + x * slope,
+        mode='lines',
+        marker=go.scatter.Marker(color='red'),
+        name='fit'
+    )
+
+    return regline, slope, intercept, r2
+
+
+def create_graph(x_data, y_data, filepath='', names='', colors='', regline=False,
                  title='title', xlab='xlab', ylab='ylab', layout='',
                  hoverinfo=None, annotations=[], aux_traces=[]):
     """Creates a scatterplot
@@ -61,6 +84,12 @@ def create_graph(x_data, y_data, filepath='', names='', colors='',
 
     Axis labels are inferred from columns in `x_data` and `y_data`.
 
+    TODO - need to just pass a series as x and y, or maybe a single 
+    dataframe. Right now it is set up for an awkward way of plotting
+    multiple series, which shoudl be superseded by aux_traces. (Will 
+    have to modify the regline `if` statement among other things after 
+    fixing this).
+
     """
     # if x_data isn't a list, put it into a list  
     if not isinstance(x_data, list):
@@ -85,6 +114,16 @@ def create_graph(x_data, y_data, filepath='', names='', colors='',
         for col in sl.columns:
             data.append(create_trace(x_data[i], y_data[i], col, colors,
                                      names, hoverinfo))
+
+    # if regression, add regression trace to aux_traces
+    # only works for the first scatter 
+    if regline:
+        reg, slope, intercept, r2 = create_regression(
+                                      x_data[0][x_data[0].columns[0]],
+                                      y_data[0][y_data[0].columns[0]],
+                                  )
+
+        aux_traces += [reg]
 
     # if more than one trace, add multiple traces 
     if len(aux_traces) > 0:
