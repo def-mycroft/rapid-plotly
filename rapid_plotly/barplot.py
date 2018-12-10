@@ -53,7 +53,8 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors,
 
 def create_graph(in_data, filepath='', names='', errors='',
                  title='title', xlab='xlab', ylab='ylab', colors='',
-                 error_barwidth=7, layout='', hoverinfo=None, annotations=[]):
+                 error_barwidth=7, layout='', hoverinfo=None, annotations=[],
+                 aux_traces=[]):
     """Creates grouped barplot
 
     The `in_data` arg must be a dataframe in the form:
@@ -126,6 +127,11 @@ def create_graph(in_data, filepath='', names='', errors='',
     for col in in_data.columns:
         data.append(create_trace(in_data, colors, col, hoverinfo, names,
                                  errors, error_barwidth))
+
+    # if more than one trace, add multiple traces 
+    if len(aux_traces) > 0:
+        for at in aux_traces:
+            data.append(at)
 
     # create layout
     # if no layout is passed, use default layout from helpers

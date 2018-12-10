@@ -27,7 +27,9 @@ def create_trace(x, y, col, colors, names, hoverinfo):
     return trace
 
 
-def create_graph(x_data, y_data, filepath='', names='', colors='', title='title', xlab='xlab', ylab='ylab', layout='', hoverinfo=None, annotations=[]):
+def create_graph(x_data, y_data, filepath='', names='', colors='',
+                 title='title', xlab='xlab', ylab='ylab', layout='',
+                 hoverinfo=None, annotations=[], aux_traces=[]):
     """Creates a scatterplot
 
     `x_data` and `y_data` are expected to be dataframes or lists of 
@@ -83,6 +85,11 @@ def create_graph(x_data, y_data, filepath='', names='', colors='', title='title'
         for col in sl.columns:
             data.append(create_trace(x_data[i], y_data[i], col, colors,
                                      names, hoverinfo))
+
+    # if more than one trace, add multiple traces 
+    if len(aux_traces) > 0:
+        for at in aux_traces:
+            data.append(at)
 
     # create layout
     # if no layout is passed, use default layout from helpers
