@@ -6,6 +6,7 @@ barplot, either in a Jupyter notebook or as an html file.
 """
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+from copy import copy
 import numpy as np
 import pandas as pd
 from . import helpers
@@ -51,10 +52,7 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors,
     return trace
 
 
-def create_graph(in_data, filepath='', names='', errors='',
-                 title='title', xlab='xlab', ylab='ylab', colors='',
-                 error_barwidth=7, layout='', hoverinfo=None, annotations=[],
-                 aux_traces=[]):
+def create_graph(in_data, filepath='', names='', errors='', alt_y=False, title='title', xlab='xlab', ylab='ylab', y2lab='y2lab', colors='', error_barwidth=7, layout='', hoverinfo=None, annotations=[], aux_traces=[]):
     """Creates grouped barplot
 
     The `in_data` arg must be a dataframe in the form:
@@ -111,6 +109,16 @@ def create_graph(in_data, filepath='', names='', errors='',
     refer to `plotly` documentation for annotation options.
 
     TODO - create method of editing axis parameters by keyword args.
+
+    TODO - update docstring to explain alt trace. 
+
+    Possible to add lines on alternate axes using `create_trace` and the
+    `aux_traces` arg. The trace needs to be created outside of the script
+    and passed as an arg.
+
+    To create data on a second y-axis, pass `alt_y=True`, build a trace,
+    pass the trace in a list as `aux_traces`.
+
     """
     # use default colors if none are passed
     # otherwise use passed dataframe
@@ -123,6 +131,9 @@ def create_graph(in_data, filepath='', names='', errors='',
 
     # create list of traces
     data = list()
+
+    if alt_y:
+        yaxis='y1' 
 
     for col in in_data.columns:
         data.append(create_trace(in_data, colors, col, hoverinfo, names,
@@ -143,6 +154,13 @@ def create_graph(in_data, filepath='', names='', errors='',
     layout['yaxis']['title'] = ylab
     layout['annotations'] = annotations
     layout = go.Layout(layout)
+
+    if alt_y:
+        y = copy(layout['yaxis'])
+        y['title'] = y2lab
+        y['side'] = 'right'
+        y['overlaying'] = 'y'
+        layout['yaxis2'] = y
 
     # create figure
     fig = go.Figure(data=data, layout=layout)
