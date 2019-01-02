@@ -55,6 +55,8 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
 
     if alt_y:
         yaxis='y1' 
+    else:
+        yaxis=None
 
     for col in in_data.columns:
         data.append(create_trace(in_data, colors, col, hoverinfo, names, yaxis))
