@@ -32,7 +32,7 @@ def create_trace(in_data, colors, col, hoverinfo, names, yaxis=None):
 def create_graph(in_data, filepath='', names='', alt_y=False,
                  title='title', xlab='xlab', ylab='ylab', y2lab='y2lab', 
                  colors='', layout='', hoverinfo=None, annotations=[],
-                 aux_traces=[], aux_first=False):
+                 aux_traces=[], aux_first=False, hovermode='closest'):
     """Creates a line plot 
 
     Possible to add lines on alternate axes using `create_trace` and the
@@ -77,6 +77,12 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
     layout['xaxis']['title'] = xlab
     layout['yaxis']['title'] = ylab
     layout['annotations'] = annotations
+
+    if hovermode == 'closest':
+        layout['hovermode'] = 'x'
+    else:
+        layout['hovermode'] = hovermode
+
     layout = go.Layout(layout)
 
     if alt_y:
