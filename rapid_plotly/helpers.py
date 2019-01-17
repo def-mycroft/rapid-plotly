@@ -16,6 +16,50 @@ layout = {
               'zerolinecolor': 'rgb(255,255,255)'}
 }
 
+def create_band(sl, color='rgba(26,150,65,0.25)', upper_col='upper',
+                lower_col='lower'):
+    """Creates traces that form a colored background band
+
+    By default assumes that `sl` contains a column `upper` and a column
+    `lower`, otherwise args `upper_col` and `lower_col` can be used to 
+    specify which traces in `sl` are the upper part of the band and 
+    which are the lower part of the band. 
+
+    An `rbga` argument is passed as `color`.
+
+    The result will probably be best if these are the first traces in
+    the list of traces. 
+
+    TODO: lower line is visible on band, need to set the opacity or 
+    something to make the lower line invisible. 
+
+    """
+    band_lower = go.Scatter(
+        x=sl.index,
+        y=sl[lower_col],
+        name='lower',
+        mode='lines',
+        fill=None,
+        marker=go.scatter.Marker(color=color),
+        showlegend=False,
+        hoverinfo='none',
+        opacity=1,
+    )
+
+    band_upper = go.Scatter(
+        x=sl.index,
+        y=sl[upper_col],
+        name='upper',
+        fill='tonexty',
+        mode='none',
+        fillcolor=color,
+        marker=go.scatter.Marker(color=color),
+        showlegend=False,
+        hoverinfo='none',
+    )
+
+    return [band_lower, band_upper]
+
 
 def to_image(fig, filepath, width=1000, height=450):
     """Writes plotly graph to image"""
