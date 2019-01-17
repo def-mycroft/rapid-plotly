@@ -32,7 +32,7 @@ def create_trace(in_data, colors, col, hoverinfo, names, yaxis=None):
 def create_graph(in_data, filepath='', names='', alt_y=False,
                  title='title', xlab='xlab', ylab='ylab', y2lab='y2lab', 
                  colors='', layout='', hoverinfo=None, annotations=[],
-                 aux_traces=[]):
+                 aux_traces=[], aux_first=False):
     """Creates a line plot 
 
     Possible to add lines on alternate axes using `create_trace` and the
@@ -63,8 +63,10 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
 
     # if more than one trace, add multiple traces 
     if len(aux_traces) > 0:
-        for at in aux_traces:
-            data.append(at)
+        if aux_first:
+            data = aux_traces + data
+        else:
+            data = data + aux_traces
 
     # create layout
     # if no layout is passed, use default layout from helpers
