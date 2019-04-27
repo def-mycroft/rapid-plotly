@@ -36,9 +36,13 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
     """Creates a line plot 
 
     Possible to add lines on alternate axes using `create_trace` and the
-    `aux_traces` arg.
+    `aux_traces` arg. The alt trace must be created and passed to this 
+    function.
 
     TODO - write docstring.
+
+    TODO - should be able to create alternate axes from the single
+    function.
 
     """
     # use default colors if none are passed
@@ -53,11 +57,14 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
     # create list of traces
     data = list()
 
+    # if there is a secondary y axis, have to specify this 
+    # when creating the primary trace
     if alt_y:
         yaxis='y1' 
     else:
         yaxis=None
 
+    # create the main traces
     for col in in_data.columns:
         data.append(create_trace(in_data, colors, col, hoverinfo, names, yaxis))
 
@@ -85,6 +92,7 @@ def create_graph(in_data, filepath='', names='', alt_y=False,
 
     layout = go.Layout(layout)
 
+    # if alt_y, duplicate `yaxis`, modify and use as a `yaxis2`.
     if alt_y:
         y = copy(layout['yaxis'])
         y['title'] = y2lab
