@@ -1,4 +1,4 @@
-"""Convenience function for creating a Plotly barplot
+"""Convenience function for creating a Plotly lineplot
 
 Use `create_graph` to create an attractive, highly interactive Plotly
 barplot, either in a Jupyter notebook or as an html file. 
@@ -14,7 +14,7 @@ output_graph = helpers.output_graph
 
 
 def create_trace(in_data, colors, col, hoverinfo, names, yaxis=None):
-    """Creates a barplot trace for a column in `in_data`"""
+    """Creates a lineplot trace for a column in `in_data`"""
     trace = go.Scatter(
         x=list(in_data.index),
         y=in_data[col],
@@ -75,7 +75,10 @@ def create_graph(in_data, names='', colors='', title='title', xlab='xlab',
     for more info.
 
     hoverinfo : either None or 'text'. Passed to the trace in
-    `create_trace`.
+    `create_trace`. By default, Plotly displays the value upon hover,
+    passing 'text' here will show only the value configured in the
+    `names` DataFrame.
+
 
     annotations : a list of dicts for annotations. For example:
 

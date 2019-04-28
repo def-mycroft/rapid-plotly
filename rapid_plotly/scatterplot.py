@@ -50,9 +50,21 @@ def create_regression(x, y):
     return regline, slope, intercept, r2
 
 
-def create_graph(x_data, y_data, filepath='', names='', colors='', regline=False,
-                 title='title', xlab='xlab', ylab='ylab', layout='',
-                 hoverinfo=None, annotations=[], aux_traces=[]):
+def create_graph(
+        x_data,
+        y_data,
+        names='',
+        colors='',
+        regline=False,
+        title='title',
+        xlab='xlab',
+        ylab='ylab',
+        hoverinfo=None,
+        annotations=[],
+        filepath='',
+        layout='',
+        aux_traces=[],
+):
     """Creates a scatterplot
 
     `x_data` and `y_data` are expected to be dataframes or lists of 
@@ -60,35 +72,83 @@ def create_graph(x_data, y_data, filepath='', names='', colors='', regline=False
     passing a list of dataframes, the order of the list is used to 
     match up x and y values. 
 
-    If a filepath is passed, the graph will be written to an html file,
-    otherwise the graph will be displayed in-line (when calling from a
-    Jupyter notebook).
+    Parameters
+    ----------
+    x_data : DataFrame of x values.
 
-    A dataframe `names` can be passed where each column of the dataframe
-    corresponds to the column name of `x_data` or to the names in each
-    dataframe in the list `x_data`.
+    y_data : DataFrame of y values.
 
-    A dataframe `colors` can be passed in a similar fashion to `names`, 
-    where each cell is a hex color code. 
+    names : DataFrame of hovertext values. Should mirror `x_data` or
+    `y_data` in form. Column names must correlate to that of `in_data`.
 
-    The `title`, `xlab` and `ylab` args are text arguments which 
-    correspond to the main title, x label and y label of the graph. 
+    colors : dict or DataFrame of colors for traces. dict keys should
+    mirror `in_data` columns. Can use hex colors or keyword colors, see
+    Plotly specifications on colors for keyword options. 
 
-    The annotations arg is expected to be a series of dicts in the form:
+    regline : passing True as `regline` adds a regression line on the
+    graph. 
 
-        {'text':'annotation text', 'x':10, 'y':15, 'showarrow'=False}
+    title : title for top of graph. Use '<br>' tag for subtitle. Tags
+    '<i>' and '<b>' can be used for italics and bold, respectively.
 
-    By default, `plotly` defines the 'x' and 'y' values in terms of the 
-    data on the graph. Annotations have a depth of features in `plotly`,
-    refer to `plotly` documentation for annotation options.
+    xlab : label for x-axis. 
 
-    Axis labels are inferred from columns in `x_data` and `y_data`.
+    ylab : label for y-ayis. 
 
-    TODO - need to just pass a series as x and y, or maybe a single 
-    dataframe. Right now it is set up for an awkward way of plotting
-    multiple series, which shoudl be superseded by aux_traces. (Will 
-    have to modify the regline `if` statement among other things after 
-    fixing this).
+    hoverinfo : either None or 'text'. Passed to the trace in
+    `create_trace`. By default, Plotly displays the value upon hover,
+    passing 'text' here will show only the value configured in the
+    `names` DataFrame.
+
+    annotations : a list of dicts for annotations. For example:
+
+        ```
+        [{'text':'More cylinders correlates to better<br> fuel mileage',
+        'x':1.5, 'y':24.5, 'showarrow':False}]
+        ```
+
+    The 'x' and 'y' keys are coordinates in terms of the graph axes, and
+    the 'text' key is the annotation text.
+
+    filepath : optional, if included will write image to file. Can be
+    written as a .html file or a .png file.
+
+    aux_traces : list of traces to be added to the graph data. Allows
+    for customization of additional traces beyond what default
+    functionality provides. 
+
+    aux_first : bool, if True then aux traces will be added first.
+
+    layout : allows for a customized layout. Default layout is in the
+    helpers module, can be accessed:
+
+        ```
+        from rapid_plotly import helpers
+        layout = helpers.layout
+        ```
+
+    Here is the default layout: 
+
+        ```
+        {'hovermode': 'closest', 'plot_bgcolor': 'rgb(229, 229, 229)',
+         'title': 'title', 'xaxis': {'gridcolor': 'rgb(255,255,255)',
+          'tickangle': 30, 'title': 'xlab',
+          'zerolinecolor': 'rgb(255,255,255)'},
+          'yaxis': {'gridcolor': 'rgb(255,255,255)', 'title': 'ylab',
+          'zerolinecolor': 'rgb(255,255,255)'}}
+        ```
+
+    alt_y : bool. If True, expect to have in_data_alt, colors_alt, 
+    names_alt. Alternative to passing alt_trace_cols, typically won't
+    be used.
+
+    in_data_alt : similar to in_data, but will be plotted on alt axis.
+
+    colors_alt : similar to colors, but applied to in_data_alt if 
+    in_data_alt passed specifically. 
+
+    names_alt : similar to names, but applied to in_data_alt if
+    in_data_alt passed specifically. 
 
     """
     # if x_data isn't a list, put it into a list  

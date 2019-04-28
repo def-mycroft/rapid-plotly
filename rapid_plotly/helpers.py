@@ -107,3 +107,18 @@ def default_colors(keys, colors=None, reverse=False):
     colors = colors * (len(keys) + 1)
 
     return dict(zip(keys, colors[:len(keys)]))
+
+
+def simple_line_trace(in_data, color='#E4572E', yaxis=None,
+                      name='linetrace'):
+    """Creates a simple linetrace"""
+    trace = go.Scatter(
+        x=list(in_data.index),
+        y=in_data[in_data.columns[0]],
+        mode='lines',
+        marker=go.scatter.Marker(color=color),
+        yaxis=yaxis,
+        name=name,
+    )
+
+    return trace

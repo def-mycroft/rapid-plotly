@@ -52,7 +52,10 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors,
     return trace
 
 
-def create_graph(in_data, filepath='', names='', errors='', alt_y=False, title='title', xlab='xlab', ylab='ylab', y2lab='y2lab', colors='', error_barwidth=7, layout='', hoverinfo=None, annotations=[], aux_traces=[]):
+def create_graph(in_data, names='', colors='', errors='', error_barwidth=4, 
+                 title='title', xlab='xlab', ylab='ylab', y2lab='y2lab',
+                 hoverinfo=None, annotations=[], filepath='', aux_traces=[],
+                 layout='', alt_y=False):
     """Creates grouped barplot
 
     The `in_data` arg must be a dataframe in the form:
@@ -72,52 +75,86 @@ def create_graph(in_data, filepath='', names='', errors='', alt_y=False, title='
     Note that `in_data` can be passed with a single column to create
     a normal barplot (as opposed to a grouped barplot).
 
-    There isn't an expected limit on the number of columns in `in_data`.
+    Error bars can be easily created by passing a DataFrame similar
+    to `in_data` where each cell represents the "+/-" value for the
+    error bar, e.g. if the value is "1.5", the error bar will range 
+    "1.5" units (in terms of the y-axis) above and "1.5" units below
+    the bar.
 
-    If a filepath is passed, the graph will be written to an html file,
-    otherwise the graph will be displayed in-line (when calling from a
-    Jupyter notebook).
+    The `aux_traces` arg can be used to create an overlaying trace, such
+    as a line graph overlaying the bars. To plot `aux_traces` on a 
+    secondary axis, the `yaxis` parameter of the trace must be set to
+    'y2' and the `alt_y` arg must be passed to this function as `True`.
 
-    A dataframe `names` can be passed; a dataframe with the same shape,
-    index and columns as `in_data` where each cell represents the
-    desired hover text for each bar. 
+    Parameters
+    ----------
+    in_data : DataFrame of traces. Data in columns will be used as
+    traces and index will be used as x-axis.
 
-    A dataframe `errors` can be passed; a dataframe with the same shape,
-    index and columns as `in_data` where each cell represents the
-    below and above value for the error bar on each large bar, e.g.
-    if the value is "5", the error bar will range from 5 units above
-    the corresponding bar and 5 units below the corresponding bar. 
+    names : DataFrame of hovertext values. Should mirror `in_data` in 
+    form.
 
-    The `error_barwidth` arg represents the width of the error bars in
-    pixels.
+    colors : dict of colors for traces. dict keys should mirror
+    `in_data` columns. Can use hex colors or keyword colors, see Plotly
+    specifications on colors for keyword options.
 
-    The `title`, `xlab` and `ylab` args are text arguments which 
-    correspond to the main title, x label and y label of the graph. 
+    errors : a DataFrame of error values for each bar. Should mirror 
+    `in_data` in form. Each cell in `errors` will be the "+/-" value 
+    for the error bars. 
 
-    The `colors` arg is a dict mapping columns of `in_data` to html
-    colors for each bar. 
+    error_barwidth : the width, in pixels, of the error bar. 
 
-    Pass "'hoverinfo='text'" to strip the default values from the
-    hovertext (and therefore only display the text passed in `names`).
+    title : title for top of graph. Use '<br>' tag for subtitle. Tags
+    '<i>' and '<b>' can be used for italics and bold, respectively.
 
-    The annotations arg is expected to be a series of dicts in the form:
+    xlab : label for x-axis. 
 
-        {'text':'annotation text', 'x':10, 'y':15, 'showarrow'=False}
+    ylab : label for y-ayis. 
 
-    By default, `plotly` defines the 'x' and 'y' values in terms of the 
-    data on the graph. Annotations have a depth of features in `plotly`,
-    refer to `plotly` documentation for annotation options.
+    y2lab : label for aly y axis.
 
-    TODO - create method of editing axis parameters by keyword args.
+    hoverinfo : either None or 'text'. Passed to the trace in
+    `create_trace`. By default, Plotly displays the value upon hover,
+    passing 'text' here will show only the value configured in the
+    `names` DataFrame.
 
-    TODO - update docstring to explain alt trace. 
+    annotations : a list of dicts for annotations. For example:
 
-    Possible to add lines on alternate axes using `create_trace` and the
-    `aux_traces` arg. The trace needs to be created outside of the script
-    and passed as an arg.
+        ```
+        [{'text':'More cylinders correlates to better<br> fuel mileage',
+        'x':1.5, 'y':24.5, 'showarrow':False}]
+        ```
 
-    To create data on a second y-axis, pass `alt_y=True`, build a trace,
-    pass the trace in a list as `aux_traces`.
+    The 'x' and 'y' keys are coordinates in terms of the graph axes, and
+    the 'text' key is the annotation text.
+
+    filepath : optional, if included will write image to file. Can be
+    written as a .html file or a .png file.
+
+    aux_traces : list of traces to be added to the graph data. Allows
+    for customization of additional traces beyond what default
+    functionality provides. 
+
+    layout : allows for a customized layout. Default layout is in the
+    helpers module, can be accessed:
+
+        ```
+        from rapid_plotly import helpers
+        layout = helpers.layout
+        ```
+
+    Here is the default layout: 
+
+        ```
+        {'hovermode': 'closest', 'plot_bgcolor': 'rgb(229, 229, 229)',
+         'title': 'title', 'xaxis': {'gridcolor': 'rgb(255,255,255)',
+          'tickangle': 30, 'title': 'xlab',
+          'zerolinecolor': 'rgb(255,255,255)'},
+          'yaxis': {'gridcolor': 'rgb(255,255,255)', 'title': 'ylab',
+          'zerolinecolor': 'rgb(255,255,255)'}}
+        ```
+
+    alt_y : bool, used to place aux_traces on alternate axis. 
 
     """
     # use default colors if none are passed
@@ -135,6 +172,7 @@ def create_graph(in_data, filepath='', names='', errors='', alt_y=False, title='
     if alt_y:
         yaxis='y1' 
 
+    # create and append traces 
     for col in in_data.columns:
         data.append(create_trace(in_data, colors, col, hoverinfo, names,
                                  errors, error_barwidth))
@@ -153,6 +191,7 @@ def create_graph(in_data, filepath='', names='', errors='', alt_y=False, title='
     layout['xaxis']['title'] = xlab
     layout['yaxis']['title'] = ylab
     layout['annotations'] = annotations
+    layout['hovermode'] = 'x'
     layout = go.Layout(layout)
 
     if alt_y:
