@@ -29,23 +29,114 @@ def create_trace(in_data, colors, col, hoverinfo, names, yaxis=None):
     return trace
 
 
-def create_graph(in_data, filepath='', names='', alt_y=False, title='title',
-                 xlab='xlab', ylab='ylab', y2lab='y2lab', colors='', layout='',
-                 hoverinfo=None, annotations=[], aux_traces=[], aux_first=False,
-                 hovermode='closest', in_data_alt=None, colors_alt='',
-                 names_alt=''):
+def create_graph(in_data, names='', colors='', title='title', xlab='xlab',
+                 ylab='ylab', y2lab='y2lab', alt_trace_cols=[],
+                 hovermode='compare', hoverinfo=None, annotations=[],
+                 filepath='', aux_traces=[], aux_first=False, layout='',
+                 alt_y=False, in_data_alt=None, colors_alt='', names_alt=''):
     """Creates a line plot 
 
-    Possible to add lines on alternate axes using `create_trace` and the
-    `aux_traces` arg. The alt trace must be created and passed to this 
-    function.
+    Where `in_data` is a DataFrame of lines with the index as the
+    x-axis.
 
-    TODO - write docstring.
+    Columns of `in_data` passed in `alt_trace_cols` will be plotted on
+    a secondary (right) y-axis.
 
-    TODO - should be able to create alternate axes from the single
-    function.
+    Parameters
+    ----------
+    in_data : DataFrame of traces. Data in columns will be used as
+    traces and index will be used as x-axis.
 
+    names : DataFrame of hovertext values. Should mirror `in_data` in 
+    form.
+
+    colors : dict of colors for traces. dict keys should mirror
+    `in_data` columns. Can use hex colors or keyword colors, see Plotly
+    specifications on colors for keyword options.
+
+    title : title for top of graph. Use '<br>' tag for subtitle. Tags
+    '<i>' and '<b>' can be used for italics and bold, respectively.
+
+    xlab : label for x-axis. 
+
+    ylab : label for y-ayis. 
+
+    y2lab : label for aly y axis.
+
+    alt_trace_cols : a subset of columns in in_data. Columns in this 
+    list will be plotted on a right-side y axis. Args colors and names
+    will be used for the alt axis.
+
+    hovermode : hovermode passed to layout. Arg 'closest' will only
+    show hovertext for data point nearest to cursor. Passing 'compare'
+    other arg will pass 'x' to `layout['hovermode']`, which sets
+    "Compare data on hover" as default. Otherwise, the arg will be
+    passed to `layout['hovermode']`, see [Plotly documentation][1]
+    for more info.
+
+    hoverinfo : either None or 'text'. Passed to the trace in
+    `create_trace`.
+
+    annotations : a list of dicts for annotations. For example:
+
+        ```
+        [{'text':'More cylinders correlates to better<br> fuel mileage',
+        'x':1.5, 'y':24.5, 'showarrow':False}]
+        ```
+
+    The 'x' and 'y' keys are coordinates in terms of the graph axes, and
+    the 'text' key is the annotation text.
+
+    filepath : optional, if included will write image to file. Can be
+    written as a .html file or a .png file.
+
+    aux_traces : list of traces to be added to the graph data. Allows
+    for customization of additional traces beyond what default
+    functionality provides. 
+
+    aux_first : bool, if True then aux traces will be added first.
+
+    layout : allows for a customized layout. Default layout is in the
+    helpers module, can be accessed:
+
+        ```
+        from rapid_plotly import helpers
+        layout = helpers.layout
+        ```
+
+    Here is the default layout: 
+
+        ```
+        {'hovermode': 'closest', 'plot_bgcolor': 'rgb(229, 229, 229)',
+         'title': 'title', 'xaxis': {'gridcolor': 'rgb(255,255,255)',
+          'tickangle': 30, 'title': 'xlab',
+          'zerolinecolor': 'rgb(255,255,255)'},
+          'yaxis': {'gridcolor': 'rgb(255,255,255)', 'title': 'ylab',
+          'zerolinecolor': 'rgb(255,255,255)'}}
+        ```
+
+    alt_y : bool. If True, expect to have in_data_alt, colors_alt, 
+    names_alt. Alternative to passing alt_trace_cols, typically won't
+    be used.
+
+    in_data_alt : similar to in_data, but will be plotted on alt axis.
+
+    colors_alt : similar to colors, but applied to in_data_alt if 
+    in_data_alt passed specifically. 
+
+    names_alt : similar to names, but applied to in_data_alt if
+    in_data_alt passed specifically. 
+
+    [1]:https://plot.ly/python/reference/#layout-hovermode
     """
+    # setup alt traces 
+    if alt_trace_cols != []:
+        alt_y = True
+        in_data_alt = in_data[alt_trace_cols].copy()
+        in_data = in_data[[
+            x for x in in_data.columns if x not in in_data_alt.columns
+        ]].copy()
+
     # setup colors
     # use default colors if none are passed
     # otherwise use passed dataframe
@@ -61,7 +152,7 @@ def create_graph(in_data, filepath='', names='', alt_y=False, title='title',
     # different colors 
     if alt_y and isinstance(colors_alt, str):
         c = in_data_alt.columns.tolist()[::-1]
-        alt_colors = helpers.default_colors(c)
+        colors_alt = helpers.default_colors(c, reverse=True)
 
     # setup names
     # setup names and errors if nothing is passed
@@ -69,8 +160,12 @@ def create_graph(in_data, filepath='', names='', alt_y=False, title='title',
         names = dict(zip(in_data.columns, in_data.columns))
 
     # same for alt names 
-    if alt_y and isinstance(names_alt, str):
+    if alt_y and isinstance(names_alt, str) and not (len(alt_trace_cols) > 0):
         names_alt = dict(zip(in_data_alt.columns, in_data_alt.columns))
+
+    # if alt cols passed, duplicate names 
+    elif alt_y and len(alt_trace_cols) > 0:
+        names_alt = names.copy()
 
     # create list of traces
     data = list()
@@ -88,6 +183,7 @@ def create_graph(in_data, filepath='', names='', alt_y=False, title='title',
 
     # create the alt traces
     if alt_y:
+        yaxis = 'y2'
         alt_traces = []
         for col in in_data_alt.columns:
             trace = create_trace(in_data_alt, colors_alt, col, hoverinfo,
@@ -114,6 +210,8 @@ def create_graph(in_data, filepath='', names='', alt_y=False, title='title',
     layout['annotations'] = annotations
 
     if hovermode == 'closest':
+        layout['hovermode'] = hovermode
+    elif hovermode == 'compare':
         layout['hovermode'] = 'x'
     else:
         layout['hovermode'] = hovermode

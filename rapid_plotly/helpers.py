@@ -87,12 +87,23 @@ def output_graph(fig, filepath, width=2000, height=900):
         to_image(fig, filepath, width=width, height=height)
 
 
-def default_colors(keys, colors=None):
-    """Generates a repeating color pallette"""
+def default_colors(keys, colors=None, reverse=False):
+    """Generates a repeating color pallette
+
+    A list of colors can be passed to the `colors` arg.
+
+    The `reverse` arg, if `True`, reverses `colors` before building the 
+    dictionary.
+
+    """
 
     if colors == None:
         colors = ['#232C65', '#840032', '#E59500', '#00A6FB',
                   '#02040F', '#E4572E']
+
+    if reverse:
+        colors = colors[::-1]
+
     colors = colors * (len(keys) + 1)
 
     return dict(zip(keys, colors[:len(keys)]))
