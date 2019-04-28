@@ -8,13 +8,17 @@ for people working on side projects.
 
 Use `rapid_plotly` to quickly create beautiful and interactive Plotly graphs,
 or use as a starting point to create your own toolbox of Plotly graph templates.
+I'm employed as a data analyst and wrote this tool for my own purposes, and 
+wanted to publish `rapid_plotly` to share and potentially help make it better.
 
 Current features:
 
 * Functions designed to rapidly prototype Plotly graphs.
 * Option to view graphs in Jupyter or to write graph to an html file.
-* Barplots, optionally grouped, with error bars and custom hover text.
+* Barplots, optionally grouped, with error bars, and custom hover text.
 * Scatterplots, with custom hover text and option to overlay multiple datasets.
+* Lineplots, with ability to easily move traces to a secondary y-axis.
+* Ability to easily create barplots with overlaying line graphs.
 
 ## Basic Usage
 
