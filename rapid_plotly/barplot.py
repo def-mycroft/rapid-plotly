@@ -55,7 +55,7 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors,
 def create_graph(in_data, names='', colors='', errors='', error_barwidth=4, 
                  title='title', xlab='xlab', ylab='ylab', y2lab='y2lab',
                  hoverinfo=None, annotations=[], filepath='', aux_traces=[],
-                 layout='', alt_y=False):
+                 layout='', alt_y=False, aux_first=False):
     """Creates grouped barplot
 
     The `in_data` arg must be a dataframe in the form:
@@ -135,6 +135,8 @@ def create_graph(in_data, names='', colors='', errors='', error_barwidth=4,
     for customization of additional traces beyond what default
     functionality provides. 
 
+    aux_first : bool, if True then aux traces will be added first.
+
     layout : allows for a customized layout. Default layout is in the
     helpers module, can be accessed:
 
@@ -177,10 +179,14 @@ def create_graph(in_data, names='', colors='', errors='', error_barwidth=4,
         data.append(create_trace(in_data, colors, col, hoverinfo, names,
                                  errors, error_barwidth))
 
-    # if more than one trace, add multiple traces 
+    # if more than one trace, add multiple traces...
+    # ... and change order of traces depending on aux_first
     if len(aux_traces) > 0:
-        for at in aux_traces:
-            data.append(at)
+        if aux_first:
+            data = aux_traces + data
+        else:
+            data = data + aux_traces
+
 
     # create layout
     # if no layout is passed, use default layout from helpers
