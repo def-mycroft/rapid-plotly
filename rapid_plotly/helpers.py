@@ -98,8 +98,8 @@ def default_colors(keys, colors=None, reverse=False):
     """
 
     if colors == None:
-        colors = ['#232C65', '#840032', '#E59500', '#00A6FB',
-                  '#02040F', '#E4572E']
+        colors = ['#FEBE0F', '#0070AF', '#A31621', '#44AF69', '#31393C',
+                  '#FCFF4B', '#A63C06']
 
     if reverse:
         colors = colors[::-1]
