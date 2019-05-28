@@ -197,7 +197,6 @@ def create_graph(in_data, names='', colors='', errors='', error_barwidth=4,
     layout['xaxis']['title'] = xlab
     layout['yaxis']['title'] = ylab
     layout['annotations'] = annotations
-    layout['hovermode'] = 'x'
     layout = go.Layout(layout)
 
     if alt_y:
