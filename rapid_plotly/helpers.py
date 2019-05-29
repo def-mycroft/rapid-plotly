@@ -16,6 +16,83 @@ layout = {
               'zerolinecolor': 'rgb(255,255,255)'}
 }
 
+
+def generate_annotations(in_data, textangle=0, vertical_offset=0.05,
+                         text_formatter=None, textfont={}):
+    """Generates annotations above each bar in a barplot
+
+    Still under development 
+
+    `in_data` should be the same input as passed to
+    `barplot.create_graph`. The text is inferred from `in_data`. 
+
+    Inferring the locations using the below logic: 
+    
+    One unit in terms of x on grouped barplot is:
+
+    $$
+    BarsPerUnit = NumberBarsPerGroup + 1
+    $$
+
+    To move location by one bar unit: 
+
+    $$
+    OneBarWidth = \frac{1}{BarsPerUnit}
+    $$
+
+    ...and one half a barwidth is of course
+
+    $$
+    OneHalfBarWidth = \frac{1}{2 BarsPerUnit}
+    $$
+
+    To get distance of one half barwidth:
+
+    $$
+    OneHalfBarWidth = \frac{1}{2(NumberBarsperGroup + 1)}
+    $$    
+
+
+    TODO - continue testing this and add to barplot.py, also 
+    to the examples dict.
+
+    """
+    vertical_offset = in_data.max().max() * vertical_offset
+    bargroups_count = len(in_data.index)
+    bars_perbargroup = len(in_data.columns)
+    onehalfbarwidth = 1 / (2*(bars_perbargroup + 1))
+    barwidth = onehalfbarwidth * 2 
+    
+    if not text_formatter:
+        text_formatter = lambda x: x
+
+    # creat mapping of bar numbers to x-axis locations
+    mapping = dict(zip(
+        range(1,(bars_perbargroup+1)),
+        np.arange(-bars_perbargroup,(bars_perbargroup+1),2)
+    ))
+    # function to generate xlocaiotn 
+    f = lambda x: onehalfbarwidth * mapping[x] + onehalfbarwidth
+
+    annt = list()
+
+    for bargroup, index in enumerate(in_data.index.tolist()):
+        for bar, col in enumerate(in_data.columns.tolist()):
+            a = {
+                'x':bargroup+f(bar+1),
+                'y':in_data.loc[index, col]+vertical_offset,
+                'text':text_formatter(in_data.loc[index, col]),
+                'showarrow':False,
+                'xref':'x',
+                'align':'center',
+                'textangle':textangle,
+                'font':textfont,
+            }
+            annt.append(a)
+            
+    return annt
+
+
 def create_band(sl, color='rgba(26,150,65,0.25)', upper_col='upper',
                 lower_col='lower'):
     """Creates traces that form a colored background band
