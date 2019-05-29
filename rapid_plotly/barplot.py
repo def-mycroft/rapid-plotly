@@ -55,7 +55,8 @@ def create_trace(in_data, colors, col, hoverinfo, names, errors,
 def create_graph(in_data, names='', colors='', errors='', error_barwidth=4, 
                  title='title', xlab='xlab', ylab='ylab', y2lab='y2lab',
                  hoverinfo=None, annotations=[], filepath='', aux_traces=[],
-                 layout='', alt_y=False, aux_first=False, figonly=False):
+                 layout='', alt_y=False, aux_first=False, figonly=False,
+                 imagesize=None):
     """Creates grouped barplot
 
     The `in_data` arg must be a dataframe in the form:
@@ -209,7 +210,14 @@ def create_graph(in_data, names='', colors='', errors='', error_barwidth=4,
     # create figure
     fig = go.Figure(data=data, layout=layout)
 
-    # output
-    output_graph(filepath=filepath, fig=fig, figonly=figonly)
+    # output graph 
+    # setup imagesize, used only for pngs
+    if not imagesize:
+        width = 1000; height = 500
+    if imagesize:
+        width, height = imagesize
+
+    output_graph(filepath=filepath, fig=fig, figonly=figonly,
+                 width=width, height=height)
 
     return fig

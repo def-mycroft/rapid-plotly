@@ -143,7 +143,7 @@ def to_image(fig, filepath, width=1000, height=450):
     pio.write_image(fig, filepath, width=width, height=height)
     
 
-def output_graph(fig, filepath, width=2000, height=900, figonly=False):
+def output_graph(fig, filepath, width=1000, height=500, figonly=False):
     """Given a Plotly fig, generates a graph
 
     If `filepath` is an empty string, display inline notebook, otherwise

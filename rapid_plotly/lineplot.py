@@ -34,7 +34,7 @@ def create_graph(in_data, names='', colors='', title='title', xlab='xlab',
                  hovermode='compare', hoverinfo=None, annotations=[],
                  filepath='', aux_traces=[], aux_first=False, layout='',
                  alt_y=False, in_data_alt=None, colors_alt='', names_alt='',
-                 figonly=False):
+                 figonly=False, imagesize=None):
     """Creates a line plot 
 
     Where `in_data` is a DataFrame of lines with the index as the
@@ -233,7 +233,13 @@ def create_graph(in_data, names='', colors='', title='title', xlab='xlab',
     # create figure
     fig = go.Figure(data=data, layout=layout)
 
-    # output
-    output_graph(filepath=filepath, fig=fig, figonly=figonly)
+    # setup imagesize, used only for pngs
+    if not imagesize:
+        width = 1000; height = 500
+    if imagesize:
+        width, height = imagesize
+
+    output_graph(filepath=filepath, fig=fig, figonly=figonly,
+                 width=width, height=height)
 
     return fig

@@ -53,7 +53,7 @@ def create_regression(x, y):
 def create_graph(x_data, y_data, names='', colors='', regline=False,
                  title='title', xlab='xlab', ylab='ylab', hoverinfo=None,
                  annotations=[], filepath='', layout='', aux_traces=[],
-                 figonly=False):
+                 figonly=False, imagesize=None):
     """Creates a scatterplot
 
     `x_data` and `y_data` are expected to be dataframes or lists of 
@@ -193,7 +193,13 @@ def create_graph(x_data, y_data, names='', colors='', regline=False,
     # create figure
     fig = go.Figure(data=data, layout=layout)
 
-    # output
-    output_graph(filepath=filepath, fig=fig, figonly=figonly)
+    # setup imagesize, used only for pngs
+    if not imagesize:
+        width = 1000; height = 500
+    if imagesize:
+        width, height = imagesize
+
+    output_graph(filepath=filepath, fig=fig, figonly=figonly,
+                 width=width, height=height)
 
     return fig
