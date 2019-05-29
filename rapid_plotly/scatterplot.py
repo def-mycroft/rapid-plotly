@@ -50,21 +50,10 @@ def create_regression(x, y):
     return regline, slope, intercept, r2
 
 
-def create_graph(
-        x_data,
-        y_data,
-        names='',
-        colors='',
-        regline=False,
-        title='title',
-        xlab='xlab',
-        ylab='ylab',
-        hoverinfo=None,
-        annotations=[],
-        filepath='',
-        layout='',
-        aux_traces=[],
-):
+def create_graph(x_data, y_data, names='', colors='', regline=False,
+                 title='title', xlab='xlab', ylab='ylab', hoverinfo=None,
+                 annotations=[], filepath='', layout='', aux_traces=[],
+                 figonly=False):
     """Creates a scatterplot
 
     `x_data` and `y_data` are expected to be dataframes or lists of 
@@ -205,6 +194,6 @@ def create_graph(
     fig = go.Figure(data=data, layout=layout)
 
     # output
-    output_graph(filepath=filepath, fig=fig)
+    output_graph(filepath=filepath, fig=fig, figonly=figonly)
 
     return fig

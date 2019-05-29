@@ -33,7 +33,8 @@ def create_graph(in_data, names='', colors='', title='title', xlab='xlab',
                  ylab='ylab', y2lab='y2lab', alt_trace_cols=[],
                  hovermode='compare', hoverinfo=None, annotations=[],
                  filepath='', aux_traces=[], aux_first=False, layout='',
-                 alt_y=False, in_data_alt=None, colors_alt='', names_alt=''):
+                 alt_y=False, in_data_alt=None, colors_alt='', names_alt='',
+                 figonly=False):
     """Creates a line plot 
 
     Where `in_data` is a DataFrame of lines with the index as the
@@ -233,6 +234,6 @@ def create_graph(in_data, names='', colors='', title='title', xlab='xlab',
     fig = go.Figure(data=data, layout=layout)
 
     # output
-    output_graph(filepath=filepath, fig=fig)
+    output_graph(filepath=filepath, fig=fig, figonly=figonly)
 
     return fig
