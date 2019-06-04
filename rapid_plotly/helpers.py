@@ -138,12 +138,27 @@ def create_band(sl, color='rgba(26,150,65,0.25)', upper_col='upper',
     return [band_lower, band_upper]
 
 
-def to_image(fig, filepath, width=680, height=520):
-    """Writes plotly graph to image"""
-    pio.write_image(fig, filepath, width=width, height=height)
+def to_image(fig, filepath, width=680, height=520, scale=None,
+             orient='horizontal'):
+    """Writes plotly graph to image
+
+    If `orient` is 'vertical', then width and height are swapped.
+
+    TODO - experiment with the scale param, see [here][1], might make 
+    for better graphs sometimes
+
+    [1]: https://plot.ly/python/static-image-export/
+    """
+    if orient == 'vertical':
+        # swap width and height param
+        c = (width, height)
+        height, width = c
+
+    pio.write_image(fig, filepath, width=width, height=height, scale=scale)
     
 
-def output_graph(fig, filepath, width=680, height=520, figonly=False):
+def output_graph(fig, filepath, width=680, height=520, figonly=False,
+                 scale=None, orient='horizontal'):
     """Given a Plotly fig, generates a graph
 
     If `filepath` is an empty string, display inline notebook, otherwise
@@ -163,7 +178,8 @@ def output_graph(fig, filepath, width=680, height=520, figonly=False):
         plot(fig, filename=filepath, auto_open=False)
         
     elif '.png' in filepath:
-        to_image(fig, filepath, width=width, height=height)
+        to_image(fig, filepath, width=width, height=height, scale=scale, 
+                 orient=orient)
 
 
 def default_colors(keys, colors=None, reverse=False):

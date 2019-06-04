@@ -198,7 +198,7 @@ def create_graph(x_data, y_data, names='', colors='', regline=False,
     if not imagesize:
         output_graph(filepath=filepath, fig=fig, figonly=figonly
 
-    if imagesize:
+    elif imagesize:
         width, height = imagesize
         output_graph(filepath=filepath, fig=fig, figonly=figonly,
                      width=width, height=height)

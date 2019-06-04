@@ -213,9 +213,9 @@ def create_graph(in_data, names='', colors='', errors='', error_barwidth=4,
     # output graph 
     # setup imagesize, used only for pngs
     if not imagesize:
-        output_graph(filepath=filepath, fig=fig, figonly=figonly
+        output_graph(filepath=filepath, fig=fig, figonly=figonly)
 
-    if imagesize:
+    elif imagesize:
         width, height = imagesize
         output_graph(filepath=filepath, fig=fig, figonly=figonly,
                      width=width, height=height)
