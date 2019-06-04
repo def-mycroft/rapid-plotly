@@ -233,13 +233,14 @@ def create_graph(in_data, names='', colors='', title='title', xlab='xlab',
     # create figure
     fig = go.Figure(data=data, layout=layout)
 
+    # output graph 
     # setup imagesize, used only for pngs
     if not imagesize:
-        width = 1000; height = 500
+        output_graph(filepath=filepath, fig=fig, figonly=figonly
+
     if imagesize:
         width, height = imagesize
-
-    output_graph(filepath=filepath, fig=fig, figonly=figonly,
-                 width=width, height=height)
+        output_graph(filepath=filepath, fig=fig, figonly=figonly,
+                     width=width, height=height)
 
     return fig

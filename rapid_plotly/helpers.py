@@ -138,12 +138,12 @@ def create_band(sl, color='rgba(26,150,65,0.25)', upper_col='upper',
     return [band_lower, band_upper]
 
 
-def to_image(fig, filepath, width=1000, height=450):
+def to_image(fig, filepath, width=680, height=520):
     """Writes plotly graph to image"""
     pio.write_image(fig, filepath, width=width, height=height)
     
 
-def output_graph(fig, filepath, width=1000, height=500, figonly=False):
+def output_graph(fig, filepath, width=680, height=520, figonly=False):
     """Given a Plotly fig, generates a graph
 
     If `filepath` is an empty string, display inline notebook, otherwise
