@@ -4,6 +4,7 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import numpy as np
 import plotly.io as pio
 import pandas as pd
+from PIL import Image
 
 # default layout
 layout = {
@@ -15,6 +16,13 @@ layout = {
     'yaxis': {'gridcolor': 'rgb(255,255,255)', 'title': 'ylab',
               'zerolinecolor': 'rgb(255,255,255)'}
 }
+
+
+def image_rotate(fp1, fp2):
+    """Transposes an image at a path, writes to new path"""
+    im = Image.open(fp1)
+    im = im.transpose(Image.ROTATE_90)
+    im.save(fp2)
 
 
 def generate_annotations(in_data, textangle=0, vertical_offset=0.05,
